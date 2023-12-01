@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비구조화 연습</title>
+  </head>
+  <body>
+    <script>
+      const book_test = ["", "", "", ""];
+      console.log("book ", book_test);
+      book_test[0] = "react";
+      console.log("book ", book_test);
+
+      const book = ["react", "vue", "js", "angular", "svelt"];
+      console.log("book : ", book);
+
+      //이런 식으로 하는 건 book1, book2는 선언만 하고, book3에 book이 할당됨.
+      let book1,
+        book2,
+        book3 = book;
+      console.log(book1, book2, book3);
+
+      //이게 의도한 거임.
+      let [book11, book22, book33] = book;
+      console.log(book11, book22, book33);
+      let [, , , book44, book55] = book;
+      console.log(book44, book55);
+
+      //나머지들을 다 가져오기
+      let [book7, ...extrabooks] = book;
+      console.log(extrabooks);
+
+      let [b1, b2, b3, b4, b5, b6, b7 = "test"] = book;
+      console.log(b1, b2, b3, b4, b5, b6, b7);
+
+      //객체 비구조화
+      const techTrend = {
+        front: "React.js",
+        backend: "Node.js",
+        server: "Linux",
+        rdbms: "MySQL",
+        noSQL: "MongoDB",
+        infra: "AWS",
+      };
+
+      //전통방식
+      let front2 = techTrend.front;
+      let backend2 = techTrend.backend;
+      console.log(front2, backend2);
+
+      //새로운방식
+
+      let { front, backend } = techTrend;
+      console.log(front, backend);
+
+      //이런 식으로 변수 이름 다르게 가져오는 것도 가능함.
+      let { front: front3, backend: backend3 } = techTrend;
+      console.log(front3, backend3);
+      //이런건 안됨. techTrend는 객체니까, {}로 추출
+      //let [front2, backend2] = techTrend;
+    </script>
+  </body>
+</html>

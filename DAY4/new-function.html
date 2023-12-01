@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>신규함수사용법</title>
+  </head>
+  <body>
+    <script>
+      function fnPlus(a, b) {
+        let c = a + b;
+        return c;
+      }
+
+      function fnPlusShort(a, b) {
+        return a + b;
+      }
+
+      let fnPlusArrow = (a, b) => a + b;
+
+      // function fnP(a,b) => a+b;이런 거 안됨
+
+      //일반 함수의 선언과 범위는 어케되나...???
+
+      //이건 당연히 되고.
+      console.log(fnPlus(3, 4));
+      {
+        //밖에서 선언한 거 안에서 하는 것도 될거고.
+        console.log(fnPlus(3, 4));
+      }
+
+      {
+        function fnPlusScopeTest(a, b) {
+          return a + b;
+        }
+
+        //scope안에서 선언하고 출력하는 것도 될거고.
+        console.log(fnPlusScopeTest(3, 4));
+      }
+      //스코프 안에서 선언하고 밖에서 출력하기는??
+      console.log(fnPlusScopeTest(3, 5));
+
+      //즉, function으로 선언한 방식으로 함수 만들면 안에서 선언하든 밖에서 선언하든 어디서든 쓸 수 있나봐.
+
+      {
+        let fnTest = (a, b) => a + b;
+        var fnTestVar = (a, b) => a + b;
+        //안에서 선언한 let, arrow
+        console.log(fnTest(1, 2));
+        console.log(fnTestVar(111, 2));
+      }
+      //안에서 선언한 let,arrow는 밖에서 몼씀
+      //console.log(fnTest(1, 22));
+
+      //var, arrow는 안에서 선언하고 밖에서 써도 됨.
+      console.log(fnTestVar(111, 2));
+
+      /////////함수정의 case2: 익명함수
+
+      var plus1 = function (a, b) {
+        return a + b;
+      };
+      console.log("plus1 : ", plus1(1, 999));
+    </script>
+  </body>
+</html>

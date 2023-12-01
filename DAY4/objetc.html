@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object 객체 정의 사용하기</title>
+  </head>
+  <body>
+    <script>
+      var name = "윤성원";
+      var age = 35;
+
+      var user = {
+        name,
+        age,
+        address: "서울시 영등포구 유탑유블레스",
+        telephone: "010-2288-3839",
+        teach: function () {
+          return "teaching node.js now.";
+        },
+      };
+
+      console.log(user);
+
+      let notebook = {
+        price: 1000,
+      };
+      console.log(notebook);
+      console.log("노트북 가격 : ", notebook.price);
+      notebook.price = 2000;
+      console.log(notebook);
+      console.log("노트북 가격 : ", notebook.price);
+
+      notebook["stock"] = 200;
+      console.log("노트북 재고 : ", notebook.stock, notebook["stock"]);
+
+      notebook.memo = "테스트메모";
+      console.log("노트북 메모 : ", notebook.memo, notebook["memo"]);
+    </script>
+  </body>
+</html>

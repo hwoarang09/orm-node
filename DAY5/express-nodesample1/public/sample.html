@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>샘플 테스트 페이지</title>
+
+    <style>
+      /*
+      input {
+        width: 300px;
+        height: 20px;
+        background-color: gray;
+      }
+      */
+    </style>
+    <link rel="stylesheet" href="./common/sample.css" />
+  </head>
+  <body>
+    <h1>회원가입</h1>
+    <img src="./images/mute.png" alt="mute icon" height="50px" />
+    <form action="">
+      아이디 : <input type="text" id="email" /><br />
+      암호 : <input type="password" id="password" /><br />
+      이름 : <input type="text" id="name" /><br />
+      <button onclick="fnValidation();">저장</button>
+    </form>
+    <script src="./common/sample.js"></script>
+    <script>
+      /*
+      function fnValidation() {
+        if (document.getElementById("email").value === "") {
+          alert("emaiil을 입력하세요.");
+          document.getElementById("email").focus();
+          return false;
+        }
+        if (document.getElementById("password").value === "") {
+          alert("password을 입력하세요.");
+          document.getElementById("password").focus();
+          return false;
+        }
+        if (document.getElementById("name").value === "") {
+          alert("name을 입력하세요.");
+          document.getElementById("name").focus();
+          return false;
+        }
+      }
+*/
+    </script>
+  </body>
+</html>

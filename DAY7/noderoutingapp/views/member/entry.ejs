@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>직접회원가입</title>
+  </head>
+  <body>
+    <h1>회원가입</h1>
+
+    <form action="/member/entry" method="post" onsubmit="return fnFormCheck();">
+      email : <input type="text" id="email" name="email" />
+      password :
+      <input type="text" id="password" name="password" />
+      <button type="submit">제출</button>
+    </form>
+
+    <script>
+      function fnFormCheck() {
+        console.log("entry페이지.");
+        if (document.getElementById("email") === "") {
+          alert("email입력해zzz");
+          event.preventDefault();
+          return false;
+        }
+        if (document.getElementById("password") === "") {
+          alert("비번입력해zzz");
+          event.preventDefault();
+          return false;
+        }
+
+        return true;
+      }
+    </script>
+  </body>
+</html>

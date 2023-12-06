@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+  </head>
+  <body>
+    <h1>로그인</h1>
+    <p>로그인아내 : <%= message %></p>
+
+    <!-- form 태그에서 action이랑 method 공부.
+    action은 폼데이터를 어디로 보낼지 주소.
+
+    form action="/auth/login"이면
+    우리는 auth/login.ejs로 데이터를 보냄.
+    method를 post로 보내니까
+    auth/login.ejs파일의 router.post("/login", 콜백함수1) 얘가 받아서 콜백함수1을 수행하는 듯.
+    
+
+    폼 태그는 한 페이지에 여러개 있을 수 있는데,
+    폼 태그 안에 폼태그가 있으면 안된다.
+    -->
+    <form action="/auth/login" method="post" onsubmit="return fnFormCheck();">
+      email : <input type="text" id="email" name="email" />
+      password :
+      <input type="text" id="password" name="password" />
+      <button type="submit">제출</button>
+    </form>
+
+    <script>
+      function fnFormCheck() {
+        console.log("체크중");
+
+        //document.getElementById("email").value에서 .value빼고 쓰면 동작이 멈춰버리네.
+        if (document.getElementById("email") === "") {
+          alert("email입력해");
+          event.preventDefault();
+          return false;
+        }
+        if (document.getElementById("password") === "") {
+          alert("비번입력해");
+          event.preventDefault();
+          return false;
+        }
+
+        return true;
+      }
+    </script>
+  </body>
+</html>

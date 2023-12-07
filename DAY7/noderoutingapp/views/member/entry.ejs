@@ -9,9 +9,10 @@
     <h1>회원가입</h1>
 
     <form action="/member/entry" method="post" onsubmit="return fnFormCheck();">
-      email : <input type="text" id="email" name="email" />
+      email : <input type="email" id="email" name="email" />
       password :
-      <input type="text" id="password" name="password" />
+      <input type="password" id="password" name="password" />
+      name : <input type="text" id="password" name="name" />
       <button type="submit">제출</button>
     </form>
 
@@ -28,7 +29,11 @@
           event.preventDefault();
           return false;
         }
-
+        if (document.getElementById("name") === "") {
+          alert("이름입력해zzz");
+          event.preventDefault();
+          return false;
+        }
         return true;
       }
     </script>

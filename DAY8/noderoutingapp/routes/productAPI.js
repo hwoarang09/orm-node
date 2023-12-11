@@ -14,4 +14,5 @@ router.get("/list", async (req, res) => {
 //url을 통해 get방식으로 서버에 데이터를 전달하는 방법 2가지
 //case1 쿼리스트링방식으로 주소를 통해 서버로 데이터를 전달
 //case2 url주소에 직접 데이터를 넣어서 주소체계를 만들어 데이터를 전달하는 방식
+//SEO최적화를 위해 url처리 잘해야함.
 module.exports = router;

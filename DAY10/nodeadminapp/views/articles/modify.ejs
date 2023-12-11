@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>articles</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>게시글 정보 확인 및 수정/삭제</h1>
+
+    <form action="/articles/modify/<%=article.articleIdx%>" method="post">
+      제목 : <input type="text" id="title" name="title" value="<%=article.title%>"/><br />
+      내용 :
+      <textarea
+        row="20"
+        cols="10"
+        style="width: 90%"
+        id="contents"
+        name="contents"
+      /><%=article.contents%></textarea><br />
+      
+      등록자: <input type="text" name="register" value="<%=article.registMemberId%>"/><br />
+      <input type="submit" value="수정" />
+      <a href="/articles">게시글목록 이동</a>
+    </form>
+  </body>
+</html>

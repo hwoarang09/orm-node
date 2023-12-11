@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>articles</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>신규 게시글 등록</h1>
+
+    <form action="/articles/create" method="post">
+      제목 : <input type="text" id="title" name="title" /><br />
+      내용 :
+      <textarea
+        row="20"
+        cols="10"
+        style="width: 90%"
+        id="contents"
+        name="contents"
+      /></textarea><br />
+      
+      등록자: <input type="text" name="register" /><br />
+      <input type="submit" value="저장" />
+      <a href="/articles">게시글목록 이동</a>
+    </form>
+  </body>
+</html>

@@ -21,23 +21,23 @@
         </tr>
       </thead>
       <tbody>
-        <% for(var i=0; i<articles.length; i++) {%>
+        <% for (var i=0; i < articles.length; i++) {%>
         <tr>
-          
           <% Object.keys(articles[i]).forEach(function(key) { %>
-            <td> 
-              <% if (key === 'ariticleIdx') {%>
-                <a href="/articles/update?idx=<%=articles[i][key]%>">
-                  <%= articles[i][key] %>
-                </a>
-              <% } %>
+          <td>
+            <% if (key === 'ariticleIdx') {%>
+            <a href="/articles/update?idx=<%=articles[i][key]%>">
+              <%= articles[i][key] %>
+            </a>
+            <% } else if (key === 'title') {%>
 
-              <% if (key === 'title') {%>
-                <a href="/articles/modify/<%=articles[i]['articleIdx']%>">
-                  <%= articles[i][key] %>
-                </a>
-              <% } %>              
-            </td>
+            <a href="/articles/modify/<%=articles[i]['ariticleIdx']%>">
+              <%= articles[i][key] %>
+            </a>
+            <% } else {%>
+            <p><%= articles[i][key] %></p>
+            <% } %>
+          </td>
           <% }); %>
         </tr>
         <% } %>

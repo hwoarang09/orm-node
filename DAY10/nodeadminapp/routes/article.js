@@ -99,6 +99,15 @@ router.post("/modify/:aid", async (req, res) => {
     registDate: Date.now(),
     registMemberId: register,
   };
+
+  res.redirect("/articles");
+});
+
+//게시글 삭제
+router.get("/delete", async (req, res) => {
+  var articleIdx = req.query.aidx;
+  console.log("articleIdx in delte ", articleIdx);
+  //해당 게시글 번호를 이용해 db에서 해당 게시글 삭제
   res.redirect("/articles");
 });
 module.exports = router;

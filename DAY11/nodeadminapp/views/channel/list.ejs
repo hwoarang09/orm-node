@@ -1,11 +1,50 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>채팅방 리스트</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1>채팅방 페이지</h1>
+    <a href="/channel/create">신규 채널 등록</a>
+    <table>
+      <thead>
+        <tr>
+          <th>채널id</th>
+          <th>카테고리코드</th>
+          <th>채널이름</th>
+          <th>유저 제한</th>
+          <th>이미지주소</th>
+          <th>설명</th>
+          <th>상태코드</th>
+          <th>등록날짜</th>
+          <th>등록id</th>
+          <th>수정날짜</th>
+          <th>수정id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i=0; i < channel_list.length; i++) {%>
+        <tr>
+          <% Object.keys(channel_list[i]).forEach(function(key) { %>
+          <td>
+            <% if (key === 'community_id') {%>
+            <a href="/channel/update?idx=<%=channel_list[i][key]%>">
+              <%= channel_list[i][key] %>
+            </a>
+            <% } else if (key === 'channel_name') {%>
+
+            <a href="/channel/modify/<%=channel_list[i]['community_id']%>">
+              <%= channel_list[i][key] %>
+            </a>
+            <% } else {%>
+            <p><%= channel_list[i][key] %></p>
+            <% } %>
+          </td>
+          <% }); %>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
   </body>
 </html>

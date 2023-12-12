@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>채널 등록</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1>신규 채널 등록</h1>
+
+    <form action="/channel/create" method="post">
+      채널id : <input type="text" id="community_id" name="community_id" /><br />
+      카테고리코드 :
+      <input type="text" id="category_code" name="category_code" /><br />
+      채널이름 :
+      <input type="text" id="channel_name" name="channel_name" /><br />
+      유저 : <input type="text" id="user_limit" name="user_limit" /><br />
+      이미지주소 :
+      <input type="text" id="channel_img_path" name="channel_img_path" /><br />
+      설명 :<input type="text" id="channel_desc" name="channel_desc" /><br />
+      상태코드 :<input
+        type="text"
+        id="channel_state_code"
+        name="channel_state_code"
+      /><br />
+      등록날짜 : <input type="text" id="reg_date" name="reg_date" /><br />
+      등록id :<input
+        type="text"
+        id="reg_member_id"
+        name="reg_member_id"
+      /><br />
+      수정날짜 : <input type="text" id="edit_date" name="edit_date" /><br />
+      수정id :<input
+        type="text"
+        id="edit_member_id"
+        name="edit_member_id"
+      /><br />
+      <input type="submit" value="저장" />
+      <a href="/channel">채널 목록 이동</a>
+    </form>
   </body>
 </html>

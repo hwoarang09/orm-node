@@ -29,7 +29,18 @@
         <tr>
           <% Object.keys(admin_members[i]).forEach(function(key) { %>
           <td>
+            <% if (key === 'company_code') {%>
+            <a href="/admin/update?idx=<%=admin_members[i][key]%>">
+              <%= admin_members[i][key] %>
+            </a>
+            <% } else if (key === 'admin_id') {%>
+
+            <a href="/admin/modify/<%=admin_members[i]['admin_id']%>">
+              <%= admin_members[i][key] %>
+            </a>
+            <% } else {%>
             <p><%= admin_members[i][key] %></p>
+            <% } %>
           </td>
           <% }); %>
         </tr>

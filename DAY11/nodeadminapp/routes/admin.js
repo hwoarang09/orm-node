@@ -3,27 +3,27 @@ var router = express.Router();
 
 /* GET home page. */
 
-router.get("/list", function (req, res, next) {
+router.get("/list", async (req, res, next) => {
   res.render("admin/list", { title: "admin/list" });
 });
 
-router.get("/create", function (req, res, next) {
+router.get("/create", async (req, res, next) => {
   res.render("admin/create", { title: "admin/create" });
 });
 
-router.post("/create", function (req, res, next) {
+router.post("/create", async (req, res, next) => {
   res.redirect("/admin/list");
 });
 
-router.get("/modify", function (req, res, next) {
+router.get("/modify", async (req, res, next) => {
   res.render("admin/modify", { title: "admin/modify" });
 });
 
-router.post("/modify", function (req, res, next) {
+router.post("/modify", async (req, res, next) => {
   res.redirect("/admin/list");
 });
 
-router.get("/delete", function (req, res, next) {
+router.get("/delete", async (req, res, next) => {
   res.redirect("/admin/list");
 });
 

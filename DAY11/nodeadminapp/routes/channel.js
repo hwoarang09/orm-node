@@ -6,6 +6,7 @@ var router = express.Router();
 router.get("/", async (req, res, next) => {
   var channel_list = [
     {
+      channel_id: 110011,
       community_id: 1,
       category_code: 1021,
       channel_name: "채널1",
@@ -19,6 +20,7 @@ router.get("/", async (req, res, next) => {
       edit_member_id: 991,
     },
     {
+      channel_id: 220022,
       community_id: 2,
       category_code: 1022,
       channel_name: "채널2",
@@ -32,6 +34,7 @@ router.get("/", async (req, res, next) => {
       edit_member_id: 992,
     },
     {
+      channel_id: 330033,
       community_id: 3,
       category_code: 1023,
       channel_name: "채널3",
@@ -82,11 +85,12 @@ router.post("/create", async (req, res, next) => {
   res.redirect("/channel");
 });
 
-router.get("/modify/:community_id", async (req, res, next) => {
-  var community_id = req.params.community_id;
+router.get("/modify/:channel_id", async (req, res, next) => {
+  var channel_id = req.params.channel_id;
 
   var channel = {
-    community_id,
+    channel_id,
+    community_id: "커뮤니티 id",
     category_code: "카테고리",
     channel_name: "채널이름",
     user_limit: "채널제한",
@@ -102,8 +106,9 @@ router.get("/modify/:community_id", async (req, res, next) => {
   res.render("channel/modify", { channel });
 });
 
-router.post("/modify/:admin_id", async (req, res, next) => {
-  var community_id = req.params.community_id;
+router.post("/modify/:channel_id", async (req, res, next) => {
+  var channel_id = req.params.channel_id;
+  var community_id = req.body.community_id;
   var category_code = req.body.category_code;
   var channel_name = req.body.channel_name;
   var user_limit = req.body.user_limit;
@@ -114,6 +119,7 @@ router.post("/modify/:admin_id", async (req, res, next) => {
   var edit_member_id = req.body.edit_member_id;
 
   var channel = {
+    channel_id,
     community_id,
     category_code,
     channel_name,
@@ -133,8 +139,8 @@ router.post("/modify/:admin_id", async (req, res, next) => {
 });
 
 router.get("/delete", async (req, res, next) => {
-  var community_id = req.query.community_id;
-  console.log("community_id in delte ", community_id);
+  var channel_id = req.query.channel_id;
+  console.log("channel_id in delte ", channel_id);
   res.redirect("/channel");
 });
 

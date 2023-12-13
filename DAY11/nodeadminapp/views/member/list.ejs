@@ -1,45 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>admin-list</title>
+    <title>멤버 리스트</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1>admin-list 페이지</h1>
-    <a href="/admin/create">신규 운영자 등록</a>
+    <h1>멤버리스트 페이지</h1>
+    <a href="/member/create">신규 Member 등록</a>
     <table>
       <thead>
         <tr>
-          <th>회사코드</th>
-          <th>아이디</th>
+          <th>Member ID</th>
+          <th>이메일</th>
           <th>비번</th>
           <th>이름</th>
-          <th>이메일</th>
+          <th>이미지주소</th>
           <th>전화번호</th>
-          <th>부서</th>
-          <th>yn코드</th>
-          <th>regUserID</th>
-          <th>editUserID</th>
-          <th>수정날짜</th>
+          <th>등록타입</th>
+          <th>상태코드</th>
+          <th>생일</th>
           <th>등록날짜</th>
+          <th>regMemberID</th>
+          <th>수정날짜</th>
+          <th>editMemberID</th>
         </tr>
       </thead>
       <tbody>
-        <% for (var i=0; i < admin_members.length; i++) {%>
+        <% for (var i=0; i < member_list.length; i++) {%>
         <tr>
-          <% Object.keys(admin_members[i]).forEach(function(key) { %>
+          <% Object.keys(member_list[i]).forEach(function(key) { %>
           <td>
-            <% if (key === 'company_code') {%>
-            <a href="/admin/update?idx=<%=admin_members[i][key]%>">
-              <%= admin_members[i][key] %>
+            <% if (key === 'email') {%>
+            <a href="/member/update?idx=<%=member_list[i][key]%>">
+              <%= member_list[i][key] %>
             </a>
-            <% } else if (key === 'admin_id') {%>
+            <% } else if (key === 'member_id') {%>
 
-            <a href="/admin/modify/<%=admin_members[i]['admin_id']%>">
-              <%= admin_members[i][key] %>
+            <a href="/member/modify/<%=member_list[i]['member_id']%>">
+              <%= member_list[i][key] %>
             </a>
             <% } else {%>
-            <p><%= admin_members[i][key] %></p>
+            <p><%= member_list[i][key] %></p>
             <% } %>
           </td>
           <% }); %>

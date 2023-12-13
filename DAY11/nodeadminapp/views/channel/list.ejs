@@ -11,6 +11,7 @@
       <thead>
         <tr>
           <th>채널id</th>
+          <th>커뮤니티id</th>
           <th>카테고리코드</th>
           <th>채널이름</th>
           <th>유저 제한</th>
@@ -32,9 +33,9 @@
             <a href="/channel/update?idx=<%=channel_list[i][key]%>">
               <%= channel_list[i][key] %>
             </a>
-            <% } else if (key === 'channel_name') {%>
+            <% } else if (key === 'channel_id') {%>
 
-            <a href="/channel/modify/<%=channel_list[i]['community_id']%>">
+            <a href="/channel/modify/<%=channel_list[i]['channel_id']%>">
               <%= channel_list[i][key] %>
             </a>
             <% } else {%>

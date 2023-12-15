@@ -247,10 +247,12 @@
       //html페이지가 브라우저에서 렌더링이 다 됐으면 발생하는 이벤트
       $(document).ready(function () {
         $("#boardTypeCode").focus();
+        console.log("렌더링완료. create");
       });
 
       //articleForm에서 submit이 발생하면 function실행.
       $("#articleForm").submit(function () {
+        //debugger;
         if ($("#boardTypeCode").val() === "0") {
           alert("선택해");
           $("#boardTypeCode").focus();
@@ -281,6 +283,7 @@
           $("#register").focus();
           return false;
         }
+        //debugger;
         return true;
       });
     </script>

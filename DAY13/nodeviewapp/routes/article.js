@@ -115,11 +115,18 @@ router.get("/delete", async (req, res, next) => {
 router.get("/modify/:aid", async (req, res, next) => {
   //선택한 게시글 고유번호를 파라메터 방식으로 URL을 통해 전달받음.
   var articleIdx = req.params.aid;
-  var article = articles.filter((article) => {
-    if (article.articleId === Number(articleIdx)) return article;
-  })[0];
-  console.log("modify article : ", JSON.stringify(article, null, 2));
-  res.render("article/modify", { article });
+  console.log("test modify get, aid : ", articleIdx);
+
+  if (articleIdx === undefined) res.send("error");
+  else {
+    var article = articles.filter((article) => {
+      if (article.articleId === Number(articleIdx)) return article;
+    })[0];
+
+    console.log("modify article : ", JSON.stringify(article, null, 2));
+
+    res.render("article/modify", { article });
+  }
 });
 router.post("/modify/:aid", function (req, res, next) {
   var articleIdx = req.params.aid;

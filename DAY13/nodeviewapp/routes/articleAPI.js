@@ -158,10 +158,28 @@ router.post("/update", async (req, res) => {
 //단일게시글 조회 api
 //localhost:3000/api/article/1
 router.get("/:aidx", async (req, res) => {
+  var aidx = req.params.aidx;
+  var data = articles.filter((article) => {
+    console.log(aidx, article.articleId);
+    if (Number(aidx) === article.articleId) {
+      return article;
+    }
+  });
+
+  if (data.length !== 0) {
+    data = data[0];
+  } else {
+    data = {
+      message: "no",
+    };
+  }
+
+  console.log("aidx : ", aidx);
+  console.log("data : ", data);
   var apiResult = {
     code: 200,
-    data: [],
-    result: "Ok",
+    data,
+    result: "Ok2",
   };
 
   res.json(apiResult);

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>admin modify</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>운영자 정보 확인 및 수정/삭제</h1>
+
+    <form action="/admin/modify/<%=admin.admin_id%>" method="post">
+      회사코드 :
+      <input type="text" id="company_code" name="company_code" /><br />
+
+      비번 :
+      <input type="text" id="admin_password" name="admin_password" /><br />
+      이름 :
+      <input type="text" id="admin_name" name="admin_name" /><br />
+      이메일 :
+      <input type="text" id="email" name="email" /><br />
+      전화번호 :
+      <input type="text" id="telephone" name="telephone" /><br />
+      부서 :
+      <input type="text" id="dept_name" name="dept_name" /><br />
+      yn코드 :
+      <input type="radio" name="used_yn_code" value="0" checked /> True
+      <input type="radio" name="used_yn_code" value="1" /> False<br />
+      regUserID :
+      <input type="text" id="reg_user_id" name="reg_user_id" /><br />
+      editUserID :
+      <input type="text" id="edit_user_id" name="edit_user_id" /><br />
+
+      <input type="submit" value="수정" />
+
+      <a href="/admin">운영진 목록 이동</a>
+
+      <a href="/admin/delete?admin_id=<%=admin.admin_id%>">삭제</a>
+    </form>
+  </body>
+</html>

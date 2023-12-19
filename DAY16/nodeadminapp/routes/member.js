@@ -8,7 +8,7 @@ var memberList = [
     name: "윤성원",
     profile_img_path: "멤버1이미지주소",
     telephone: "01022883839",
-    entryTypeCode: 1,
+    entry_type_code: 1,
     use_state_code: 1,
     birth_date: "900311",
     reg_date: Date.now(),

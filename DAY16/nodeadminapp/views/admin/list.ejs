@@ -78,12 +78,12 @@
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th width="10%">이메일</th>
-                          <th width="10%">이름</th>
-                          <th width="20%">전화번호</th>
-                          <th width="20%">조회수</th>
-                          <th width="10%">생일</th>
-                          <th width="10%">상태코드</th>
+                          <th width="10%">회사코드</th>
+                          <th width="10%">관리자id</th>
+                          <th width="20%">관리자이름</th>
+                          <th width="20%">이메일</th>
+                          <th width="10%">전화번호</th>
+                          <th width="10%">부서</th>
                           <th width="20%">등록날짜</th>
                         </tr>
                       </thead>
@@ -92,7 +92,7 @@
 
                         <tr>
                           <% Object.keys(admin_members[i]).forEach(function(key) { %>
-                          <% if (key === 'contents' || key === 'regMemberId' || key === 'articleTypeCode') {
+                          <% if (key === 'used_yn_code' ||key === 'edit_date' ||key === 'admin_password' || key === 'reg_user_id' || key === 'edit_user_id') {
                           %> <% return; %> <% } %>
                           <td>
                             <% if (key === 'title') { %>

@@ -77,12 +77,12 @@
                     <table class="table table-hover">
                       <thead>
                         <tr>
+                          <th width="10%">멤버id</th>
                           <th width="10%">이메일</th>
-                          <th width="10%">이름</th>
+                          <th width="20%">이름</th>
                           <th width="20%">전화번호</th>
-                          <th width="20%">조회수</th>
+                          <th width="10%">가입유형</th>
                           <th width="10%">생일</th>
-                          <th width="10%">상태코드</th>
                           <th width="20%">등록날짜</th>
                         </tr>
                       </thead>
@@ -91,7 +91,7 @@
 
                         <tr>
                           <% Object.keys(memberList[i]).forEach(function(key) { %>
-                          <% if (key === 'contents' || key === 'regMemberId' || key === 'articleTypeCode') {
+                          <% if (key === 'edit_date' || key === 'reg_member_id' || key === 'edit_member_id' || key === 'member_password' || key === 'profile_img_path' || key === 'entry_type_code') {
                           %> <% return; %> <% } %>
                           <td>
                             <% if (key === 'title') { %>

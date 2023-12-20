@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>멤버 리스트</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>멤버리스트 페이지</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Member ID</th>
+          <th>이메일</th>
+          <th>비번</th>
+          <th>이름</th>
+          <th>이미지주소</th>
+          <th>전화번호</th>
+          <th>등록타입</th>
+          <th>상태코드</th>
+          <th>생일</th>
+          <th>등록날짜</th>
+          <th>regMemberID</th>
+          <th>수정날짜</th>
+          <th>editMemberID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i=0; i < member_list.length; i++) {%>
+        <tr>
+          <% Object.keys(member_list[i]).forEach(function(key) { %>
+          <td>
+            <% if (key === 'email') {%>
+            <a href="/member/update?idx=<%=member_list[i][key]%>">
+              <%= member_list[i][key] %>
+            </a>
+            <% } else if (key === 'member_id') {%>
+
+            <a href="/member/modify/<%=member_list[i]['member_id']%>">
+              <%= member_list[i][key] %>
+            </a>
+            <% } else {%>
+            <p><%= member_list[i][key] %></p>
+            <% } %>
+          </td>
+          <% }); %>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </body>
+</html>

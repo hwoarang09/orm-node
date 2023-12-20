@@ -1,37 +1,135 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>admin-member 등록</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
-  <body>
-    <h1>신규 운영자 등록</h1>
+<!--우측 콘텐츠 헤더영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>신규 메세지 등록</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">Home-></a>
+      </li>
+      <li>
+        <a>신규 메세지 작성-></a>
+      </li>
+      <li class="active">
+        <strong>등록</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2"></div>
+</div>
 
-    <form action="/admin/create" method="post">
-      회사코드 :
-      <input type="text" id="company_code" name="company_code" /><br />
-      아이디 :
-      <input type="text" id="admin_id" name="admin_id" /><br />
-      비번 :
-      <input type="text" id="admin_password" name="admin_password" /><br />
-      이름 :
-      <input type="text" id="admin_name" name="admin_name" /><br />
-      이메일 :
-      <input type="text" id="email" name="email" /><br />
-      전화번호 :
-      <input type="text" id="telephone" name="telephone" /><br />
-      부서 :
-      <input type="text" id="dept_name" name="dept_name" /><br />
-      yn코드 :
-      <input type="radio" name="used_yn_code" value="0" checked /> True
-      <input type="radio" name="used_yn_code" value="1" /> False<br />
-      regUserID :
-      <input type="text" id="reg_user_id" name="reg_user_id" /><br />
-      editUserID :
-      <input type="text" id="edit_user_id" name="edit_user_id" /><br />
+<!--우측 콘텐츠 영역 -->
+<form action="/message/create" id="articleForm" method="post">
+  <div class="wrapper wrapper-content">
+    <div class="ibox-content m-b-sm border-bottom">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">채널번호</label>
+            <select name="channel_id" id="channel_id" class="form-control">
+              <option value="0">전체</option>
+              <option value="1">1번채널</option>
+              <option value="2">2번채널</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="control-label">채팅닉네임</label>
+            <input
+              type="text"
+              name="nick_name"
+              id="nick_name"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
 
-      <input type="submit" value="저장" />
-      <a href="/admin">운영진 목록 이동</a>
-    </form>
-  </body>
-</html>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="control-label">메세지</label>
+            <textarea
+              class="form-control"
+              id="message"
+              name="message"
+              rows="10"
+              cols="5"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">메세지 상태</label>
+            <select
+              name="msg_state_code"
+              id="msg_state_code"
+              class="form-control"
+            >
+              <option value="9">전체</option>
+              <option value="0">퇴장</option>
+              <option value="1">입장</option>
+              <option value="3">일반메세지</option>
+              <option value="4">파일메세지</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a href="/message/list" class="btn btn-info">목록</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  //html페이지가 브라우저에서 렌더링이 다 됐으면 발생하는 이벤트
+  $(document).ready(function () {
+    $("#boardTypeCode").focus();
+    console.log("렌더링완료. create");
+  });
+
+  //articleForm에서 submit이 발생하면 function실행.
+  $("#articleForm").submit(function () {
+    //debugger;
+    if ($("#boardTypeCode").val() === "0") {
+      alert("선택해");
+      $("#boardTypeCode").focus();
+      return false;
+    }
+    if ($("#title").val() === "") {
+      alert("제목입력해");
+      $("#title").focus();
+      return false;
+    }
+    if ($("#contents").val() === "") {
+      alert("내용입력해");
+      $("#contents").focus();
+      return false;
+    }
+    if ($("#articleTypeCode").val() === "0") {
+      alert("게시유형 선택해");
+      $("#articleTypeCode").focus();
+      return false;
+    }
+    if ($("#isDisplayCode").val() === "0") {
+      alert("게시여부 선택해");
+      $("#isDisplayCode").focus();
+      return false;
+    }
+    if ($("#register").val() === "") {
+      alert("작성자명 선택해");
+      $("#register").focus();
+      return false;
+    }
+    //debugger;
+    return true;
+  });
+</script>

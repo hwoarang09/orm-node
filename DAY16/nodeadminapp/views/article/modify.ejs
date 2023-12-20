@@ -1,39 +1,179 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>admin modify</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
-  <body>
-    <h1>운영자 정보 확인 및 수정/삭제</h1>
 
-    <form action="/admin/modify/<%=admin.admin_id%>" method="post">
-      회사코드 :
-      <input type="text" id="company_code" name="company_code" /><br />
+        <!--우측 콘텐츠 헤더영역 -->
+        <div class="row wrapper border-bottom white-bg page-heading">
+          <div class="col-lg-10">
+            <h2>게시글 확인 및 수정</h2>
+            <ol class="breadcrumb">
+              <li>
+                <a href="/">Home-></a>
+              </li>
+              <li>
+                <a>게시글 확인 및 수정-></a>
+              </li>
+              <li class="active">
+                <strong>등록</strong>
+              </li>
+            </ol>
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
 
-      비번 :
-      <input type="text" id="admin_password" name="admin_password" /><br />
-      이름 :
-      <input type="text" id="admin_name" name="admin_name" /><br />
-      이메일 :
-      <input type="text" id="email" name="email" /><br />
-      전화번호 :
-      <input type="text" id="telephone" name="telephone" /><br />
-      부서 :
-      <input type="text" id="dept_name" name="dept_name" /><br />
-      yn코드 :
-      <input type="radio" name="used_yn_code" value="0" checked /> True
-      <input type="radio" name="used_yn_code" value="1" /> False<br />
-      regUserID :
-      <input type="text" id="reg_user_id" name="reg_user_id" /><br />
-      editUserID :
-      <input type="text" id="edit_user_id" name="edit_user_id" /><br />
+        <!--우측 콘텐츠 영역 -->
+        <form
+          action="/article/modify/<%=article.articleId%>"
+          id="articleForm"
+          method="post"
+        >
+          <div class="wrapper wrapper-content">
+            <div class="ibox-content m-b-sm border-bottom">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">게시판</label>
+                    <select
+                      name="boardTypeCode"
+                      id="boardTypeCode"
+                      class="form-control"
+                    >
+                      <option value="0" <% if(article.boardTypeCode === 0) { %> selected <%} %>>전체</option>
+                      <option value="1" <% if(article.boardTypeCode === 1) { %> selected <%} %>>공지게시판</option>
+                      <option value="2" <% if(article.boardTypeCode === 2) { %> selected <%} %>>기술블로깅</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label class="control-label">글제목</label>
+                    <input
+                      type="text"
+                      name="title"
+                      id="title"
+                      class="form-control"
+                      value=<%= article.title %>
+                    />
+                  </div>
+                </div>
+              </div>
 
-      <input type="submit" value="수정" />
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label class="control-label">내용</label>
+                    <textarea
+                      class="form-control"
+                      id="contents"
+                      name="contents"
+                      rows="10"
+                      cols="5"
+                      
+                    ><%= article.contents %></textarea>
+                  </div>
+                </div>
+              </div>
 
-      <a href="/admin">운영진 목록 이동</a>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">게시글 유형</label>
+                    <select
+                      name="articleTypeCode"
+                      id="articleTypeCode"
+                      class="form-control"
+                    >
+                      <option value="9" <% if( article.articleTypeCode === 9) { %> selected <%} %>>선택해요</option>
+                      <option value="1" <% if( article.articleTypeCode === 1) { %> selected <%} %>>상단고정</option>
+                      <option value="0" <% if( article.articleTypeCode === 0) { %> selected <%} %>>일반</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">게시여부</label>
+                    <select
+                      name="isDisplayCode"
+                      id="isDisplayCode"
+                      class="form-control"
+                    >
+                      <option value="9" <% if( article.isDisplayCode === 9) { %> selected <%} %>>전체</option>
+                      <option value="1" <% if( article.isDisplayCode === 1) { %> selected <%} %>>Y</option>
+                      <option value="0" <% if( article.isDisplayCode === 0) { %> selected <%} %>>N</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">수정자명</label>
+                    <input
+                      type="text"
+                      name="register"
+                      id="register"
+                      class="form-control"
+                      value= <%= article.regMemberId %>
+                    />
+                  </div>
+                </div>
+              </div>
 
-      <a href="/admin/delete?admin_id=<%=admin.admin_id%>">삭제</a>
-    </form>
-  </body>
-</html>
+              <div class="text-center">
+                <input type="submit" id='btnEdit' name='btnEdit' class="btn btn-primary" value="수정"></input>
+                <input type="submit" id='btnDelete' name='btnDelete' class="btn btn-danger" value="삭제"></input>
+                <a href="/article/list" class="btn btn-info">목록</a>
+              </div>
+            </div>
+          </div>
+        </form>
+
+    <script>
+      //html페이지가 브라우저에서 렌더링이 다 됐으면 발생하는 이벤트
+      $(document).ready(function () {
+        $("#boardTypeCode").focus();
+      });
+
+      //articleForm에서 submit이 발생하면 function실행.
+      $("#articleForm").submit(function () {
+        if ($("#boardTypeCode").val() === "9") {
+          alert("선택해");
+          $("#boardTypeCode").focus();
+          return false;
+        }
+        if ($("#title").val() === "") {
+          alert("제목입력해");
+          $("#title").focus();
+          return false;
+        }
+        if ($("#contents").val() === "") {
+          alert("내용입력해");
+          $("#contents").focus();
+          return false;
+        }
+        if ($("#articleTypeCode").val() === "9") {
+          alert("게시유형 선택해");
+          $("#articleTypeCode").focus();
+          return false;
+        }
+        if ($("#isDisplayCode").val() === "9") {
+          alert("게시여부 선택해");
+          $("#isDisplayCode").focus();
+          return false;
+        }
+        if ($("#register").val() === "") {
+          alert("작성자명 선택해");
+          $("#register").focus();
+          return false;
+        }
+        return true;
+      });
+
+      $("#btnDelete").click(function() {
+        if (confirm('삭제할꺼야?')) {
+          alert('삭제o');
+          window.location.href = "새로운URL";
+        }
+        else {
+          alert('삭제취소');
+        }
+      })
+    </script>
+

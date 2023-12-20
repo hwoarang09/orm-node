@@ -2,19 +2,18 @@ var express = require("express");
 var router = express.Router();
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+router.get("/", async (req, res) => res.render("login", { layout: true }));
+
+router.get("/index", function (req, res, next) {
+  res.render("index", { title: "login", layout: false });
 });
 
-router.get("/login", function (req, res, next) {
-  res.render("login", { title: "login" });
-});
-
-router.post("/login", function (req, res, next) {
-  let id = req.body.id;
+router.post("/", function (req, res, next) {
+  let email = req.body.email;
   let password = req.body.password;
-  console.log(`login post!! id : ${id}   password : ${password}`);
-  res.redirect("/chat");
+  console.log(`find /!! email : ${email}   password : ${password}`);
+
+  res.redirect("/index");
 });
 
 router.get("/entry", function (req, res, next) {
@@ -22,10 +21,11 @@ router.get("/entry", function (req, res, next) {
 });
 
 router.post("/entry", function (req, res, next) {
-  let id = req.body.id;
+  let email = req.body.email;
   let password = req.body.password;
-  console.log(`entry post!! id : ${id}   password : ${password}`);
-  res.redirect("/login");
+  console.log(`entry post!! email : ${email}   password : ${password}`);
+
+  res.redirect("/");
 });
 
 router.get("/find", function (req, res, next) {
@@ -33,10 +33,10 @@ router.get("/find", function (req, res, next) {
 });
 
 router.post("/find", function (req, res, next) {
-  let id = req.body.id;
   let email = req.body.email;
-  console.log(`find post!! id : ${id}   email : ${email}`);
+  let password = req.body.password;
+  console.log(`find post!! email : ${email}   password : ${password}`);
 
-  res.redirect("/login");
+  res.redirect("/");
 });
 module.exports = router;

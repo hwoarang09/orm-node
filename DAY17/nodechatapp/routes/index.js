@@ -3,6 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", async (req, res) => res.render("login", { layout: true }));
+router.get("/login", async (req, res) => res.render("login", { layout: true }));
 
 router.get("/index", function (req, res, next) {
   res.render("index", { title: "login", layout: false });

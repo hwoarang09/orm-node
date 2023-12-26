@@ -1,6 +1,6 @@
 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
   <div class="login-wrapper">
-    <form action="/entry" method="post">
+    <form action="/entry" method="post" id="entryForm" name="entryForm">
       <div class="login-screen">
         <div class="login-body">
           <a href="/entry" class="login-logo">
@@ -8,7 +8,7 @@
           </a>
           <h6>Welcome to Quick Chat App,<br />Create your account.</h6>
           <div class="field-wrapper">
-            <input type="email" autofocus />
+            <input type="email" id="email" autofocus />
             <div class="field-placeholder">Email ID</div>
           </div>
           <div class="field-wrapper">
@@ -35,3 +35,19 @@
     </form>
   </div>
 </div>
+
+<script>
+  alert("hi");
+  $("#entryForm").submit(function () {
+    console.log("t");
+    alert("hi2");
+
+    if ($("#email").val() === "") {
+      console.log("tt");
+      alert("메일주소 입력해라");
+      alert("hi3");
+
+      return false;
+    }
+  });
+</script>

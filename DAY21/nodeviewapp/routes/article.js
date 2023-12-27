@@ -1,51 +1,60 @@
 var express = require("express");
 var router = express.Router();
 
-const articles = [
-  {
-    articleId: 1,
-    boardTypeCode: 1,
-    title: "공지게시글1번글",
-    contents: "1번글 내용",
-    viewCount: 10,
-    ipAddress: "111.111.123.44",
-    articleTypeCode: 0,
-    isDisplayCode: 1,
-    regDate: "2023-12-12",
-    regMemberId: "eddy",
-  },
-  {
-    articleId: 2,
-    boardTypeCode: 2,
-    title: "기술블로깅 1번글",
-    contents: "2번글 내용",
-    viewCount: 12,
-    ipAddress: "111.111.123.42",
-    articleTypeCode: 1,
-    isDisplayCode: 1,
-    regDate: "2023-12-22",
-    regMemberId: "eddy2",
-  },
-  {
-    articleId: 3,
-    boardTypeCode: 1,
-    title: "공지게시글3번글",
-    contents: "3번글 내용",
-    viewCount: 13,
-    ipAddress: "111.111.123.49",
-    articleTypeCode: 1,
-    isDisplayCode: 0,
-    regDate: "2023-12-14",
-    regMemberId: "eddy3",
-  },
-];
+var db = require("../models/index");
+
+// const articles = [
+//   {
+//     articleId: 1,
+//     boardTypeCode: 1,
+//     title: "공지게시글1번글",
+//     contents: "1번글 내용",
+//     viewCount: 10,
+//     ipAddress: "111.111.123.44",
+//     articleTypeCode: 0,
+//     isDisplayCode: 1,
+//     regDate: "2023-12-12",
+//     regMemberId: "eddy",
+//   },
+//   {
+//     articleId: 2,
+//     boardTypeCode: 2,
+//     title: "기술블로깅 1번글",
+//     contents: "2번글 내용",
+//     viewCount: 12,
+//     ipAddress: "111.111.123.42",
+//     articleTypeCode: 1,
+//     isDisplayCode: 1,
+//     regDate: "2023-12-22",
+//     regMemberId: "eddy2",
+//   },
+//   {
+//     articleId: 3,
+//     boardTypeCode: 1,
+//     title: "공지게시글3번글",
+//     contents: "3번글 내용",
+//     viewCount: 13,
+//     ipAddress: "111.111.123.49",
+//     articleTypeCode: 1,
+//     isDisplayCode: 0,
+//     regDate: "2023-12-14",
+//     regMemberId: "eddy3",
+//   },
+// ];
 /* GET home page. */
-router.get("/list", function (req, res, next) {
+router.get("/list", async (req, res, next) => {
   var searchOption = {
     boardTypeCode: "0",
     title: "기본",
     isDisplayCode: "9",
   };
+
+  var articles = await db.Article.findAll();
+  articles = articles.map((arr) => {
+    return arr.dataValues;
+  });
+
+  console.log("articles : ", articles);
   res.render("article/list", { articles, searchOption });
 });
 
@@ -117,6 +126,7 @@ router.get("/modify/:aid", async (req, res, next) => {
   var articleIdx = req.params.aid;
   console.log("test modify get, aid : ", articleIdx);
 
+  var article = await db.Article.findOne();
   if (articleIdx === undefined) res.send("error");
   else {
     var article = articles.filter((article) => {

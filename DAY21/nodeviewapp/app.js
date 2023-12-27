@@ -3,7 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
+var sequelize = require("./models/index").sequelize;
 //레이아웃 참조
 var expressLayouts = require("express-ejs-layouts");
 
@@ -11,7 +11,13 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var articleRouter = require("./routes/article");
 var articleAPIRouter = require("./routes/articleAPI");
+
+var sequelize = require("./models/index.js").sequelize;
+
 var app = express();
+
+//mysql과 자동연결처리 및 모델기반 물리 테이블 생성처리제공
+sequelize.sync();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

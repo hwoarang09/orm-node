@@ -25,6 +25,6 @@ db.Sequelize = Sequelize; //Sequelize팩키지에서 제공하는 각종 데이�
 //이거 때문에 memeber.js에서는 require Sequelize 이런거 안해도 됨.
 //소문자가 db랑 연결된 거
 //대문자는 메소드들이 있는거.
-db.Member = require("./member.js")(sequelize, Sequelize);
+db.Member = require("./member")(sequelize, Sequelize);
 //db객체 외부로 노출하기
 module.exports = db;

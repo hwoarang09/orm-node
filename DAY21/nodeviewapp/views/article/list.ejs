@@ -95,7 +95,7 @@
 
                         <tr>
                           <% Object.keys(articles[i]).forEach(function(key) { %>
-                          <% if (key === 'contents' || key === 'regMemberId' || key === 'articleTypeCode') {
+                          <% if (key === 'contents' || key === 'reg_member_id' || key === 'article_type_code') {
                           %> <% return; %> <% } %>
                           <td>
                             <% if (key === 'title') { %>
@@ -104,15 +104,15 @@
                             >
                               <%= articles[i][key] %>
                             </a>
-                            <% } else if (key === 'articleId') { %>
+                            <% } else if (key === 'article_id') { %>
 
                             <a
-                              href="/article/modify/<%=articles[i]['articleId']%>"
+                              href="/article/modify/<%=articles[i]['article_id']%>"
                             >
                               <%= articles[i][key] %>
                             </a>
 
-                            <% } else if (key === 'isDisplayCode') { %> <% if
+                            <% } else if (key === 'is_display_code') { %> <% if
                             (articles[i][key] === 1) { %>
                             <p>게시함</p>
                             <% } else { %>

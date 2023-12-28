@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>멤버 수정</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>멤버 정보 확인 및 수정/삭제</h1>
+
+    <form action="/member/modify/<%=member.member_id%>" method="post">
+      이메일: <input type="text" id="email" name="email" /><br />
+      비번:
+      <input type="text" id="member_password" name="member_password" /><br />
+      이름: <input type="text" id="name" name="name" /><br />
+      이미지주소:
+      <input type="text" id="profile_img_path" name="profile_img_path" /><br />
+      전화번호: <input type="text" id="telephone" name="telephone" /><br />
+      등록타입:
+      <input type="text" id="entry_type_code" name="entry_type_code" /><br />
+      상태코드:
+      <input type="text" id="use_state_code" name="use_state_code" /><br />
+      생일: <input type="text" id="birth_date" name="birth_date" /><br />
+      regMemberID:
+      <input type="text" id="reg_member_id" name="reg_member_id" /><br />
+      editMemberID:
+      <input type="text" id="edit_member_id" name="edit_member_id" /><br />
+
+      <input type="submit" value="수정" />
+
+      <a href="/member">멤버 목록 이동</a>
+
+      <a href="/member/delete?member_id=<%=member.member_id%>">삭제</a>
+    </form>
+  </body>
+</html>

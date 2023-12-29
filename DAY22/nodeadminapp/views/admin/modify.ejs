@@ -145,7 +145,7 @@
                       name="edit_user_id"
                       id="edit_user_id"
                       class="form-control"
-                      value=<%= admin.edit_user_id %>
+                      value=<%= admin.edit_user_id ? admin.edit_user_id : "1"  %>
                     />
                   </div>
                 </div>                
@@ -164,6 +164,21 @@
         </form>
 
     <script>
-      
+      $("#adminForm").submit(function () {
+      var edit_user_id = $("#edit_user_id").val();
+
+        // 값이 비어 있는지 먼저 확인
+        if (edit_user_id.trim() === "") {
+            alert("값을 입력하세요.");
+            return;
+        }
+        
+        if ($.isNumeric(edit_user_id)) {
+            return true;
+        } else {
+            alert("수정자명이 숫자가 아닙니다.");
+            $("#edit_user_id").focus();
+            
+        }}
     </script>
 

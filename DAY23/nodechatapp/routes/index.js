@@ -1,19 +1,32 @@
 var express = require("express");
 var router = express.Router();
+var db = require("../models/index");
+var Op = db.Sequelize.Op;
 
 /* GET home page. */
-router.get("/", async (req, res) => res.render("login", { layout: true }));
-router.get("/login", async (req, res) => res.render("login", { layout: true }));
+//router.get("/", async (req, res) => res.render("login", { layout: true }));
+router.get(["/", "/login"], async (req, res) => {
+  res.render("login", { layout: true });
+});
 
-router.get("/index", function (req, res, next) {
+router.get("/index", async (req, res, next) => {
   res.render("index", { title: "login", layout: false });
 });
 
-router.post("/", function (req, res, next) {
-  let email = req.body.email;
-  let password = req.body.password;
-  console.log(`find /!! email : ${email}   password : ${password}`);
+router.post(["/", "/login"], async (req, res, next) => {
+  var searchOption = ({ email, member_password } = req.body);
 
+  var member = await db.Member.findOne({
+    attributes: ["email", "member_password"],
+    where: {
+      email: searchOption.email,
+    },
+  });
+  // member = member.map((arr) => {
+  //   return arr.dataValues;
+  // });
+  console.log("searchOption : ", searchOption);
+  console.log("member : ", member);
   res.redirect("/index");
 });
 

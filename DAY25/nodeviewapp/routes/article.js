@@ -116,8 +116,12 @@ router.post("/create", async (req, res, next) => {
   res.redirect("/article/list");
 });
 
-router.get("/delete", async (req, res, next) => {
-  var articleIdx = req.query.aid;
+router.get("/delete/:aid", async (req, res, next) => {
+  var articleIdx = req.params.aid;
+
+  var result = await Article.deleteOne({ article_id: articleIdx });
+  console.log("articleidx : ", articleIdx, result);
+
   res.redirect("/article/list");
 });
 
@@ -128,22 +132,30 @@ router.get("/modify/:aid", async (req, res, next) => {
 
   if (articleIdx === undefined) res.send("error");
   else {
-    const articles = await Article.find({});
-    var article = articles.filter((article) => {
-      if (article.article_id === Number(articleIdx)) return article;
-    })[0];
+    const article = await Article.findOne({});
+    // var article = articles.filter((article) => {
+    //   if (article.article_id === Number(articleIdx)) return article;
+    // })[0];
 
     console.log("modify article : ", JSON.stringify(article, null, 2));
 
     res.render("article/modify", { article });
   }
 });
-router.post("/modify/:aid", function (req, res, next) {
+router.post("/modify/:aid", async (req, res, next) => {
   var articleIdx = req.params.aid;
 
-  var article = articles.filter((article) => {
-    if (article.articleId === Number(articleIdx)) return article;
-  })[0];
+  var article = await Article.findOne({ article_id: articleIdx });
+  var article = {
+    title: req.body.title,
+    contents: req.body.contents,
+    article_type_code: req.body.articleTypeCode,
+    view_count: article.view_count,
+    is_display_code: req.body.isDisplayCode,
+    edit_member_id: req.body.register,
+    registDate: Date.now(),
+  };
+  await Article.updateOne({ article_id: articleIdx }, article);
   console.log("modify post article : ", JSON.stringify(article, null, 2));
   res.redirect("/article/list");
 });

@@ -11,7 +11,9 @@
 
     <link href="/css/animate.css" rel="stylesheet" />
     <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/plugins/switchery/switchery.css" rel="stylesheet" />
 
+    <link href="/css/plugins/footable/footable.core.css" rel="stylesheet" />
     <!--추가 스타일-->
     <%- style%>
   </head>
@@ -118,7 +120,9 @@
     <!--추가 스크립트-->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/plugins/switchery/switchery.js"></script>
 
+    <script src="/js/plugins/footable/footable.all.min.js"></script>
     <script>
       $("#searchForm").submit(function () {
         if ($("#boardTypeCode").val() === "0") {

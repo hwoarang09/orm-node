@@ -1,47 +1,11 @@
 var express = require("express");
 var router = express.Router();
 
-var db = require("../models/index");
-var Op = db.Sequelize.Op;
-// const articles = [
-//   {
-//     articleId: 1,
-//     boardTypeCode: 1,
-//     title: "공지게시글1번글",
-//     contents: "1번글 내용",
-//     viewCount: 10,
-//     ipAddress: "111.111.123.44",
-//     articleTypeCode: 0,
-//     isDisplayCode: 1,
-//     regDate: "2023-12-12",
-//     regMemberId: "eddy",
-//   },
-//   {
-//     articleId: 2,
-//     boardTypeCode: 2,
-//     title: "기술블로깅 1번글",
-//     contents: "2번글 내용",
-//     viewCount: 12,
-//     ipAddress: "111.111.123.42",
-//     articleTypeCode: 1,
-//     isDisplayCode: 1,
-//     regDate: "2023-12-22",
-//     regMemberId: "eddy2",
-//   },
-//   {
-//     articleId: 3,
-//     boardTypeCode: 1,
-//     title: "공지게시글3번글",
-//     contents: "3번글 내용",
-//     viewCount: 13,
-//     ipAddress: "111.111.123.49",
-//     articleTypeCode: 1,
-//     isDisplayCode: 0,
-//     regDate: "2023-12-14",
-//     regMemberId: "eddy3",
-//   },
-// ];
-/* GET home page. */
+const db = require("../models/index");
+const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
+const { QueryTypes } = sequelize;
+
 router.get("/list", async (req, res, next) => {
   var searchOption = {
     boardTypeCode: "0",
@@ -70,9 +34,45 @@ router.get("/list", async (req, res, next) => {
   articles = articles.map((arr) => {
     return arr.dataValues;
   });
+  // ㄴSELECT article_id FOROM article WHRE is
+  // var articles = await db.Article.findAll({
+  //   attributes: [
+  //     'article_id',
+  //     'board_type_code',
+  //     'title',
+  //     'article_type_code',
+  //     'view_count',
+  //     'is_display_code',
+  //     'reg_member_id',
+  //   ],
+  //   where: {
+  //     is_display_code: 1,
+  //     // view_count: { [Op.not]: 0 }
+  //   },
+  //   order: [['article_id', 'DESC']],
+  // });
+
+  // const sqlQuery = `SELECT article_id,board_type_code,title,article_type_code,view_count,ip_address,is_display_code,reg_date,reg_member_id
+  // FROM article
+  // WHERE is_display_code = 1
+  // ORDER BY article_id DESC;
+  // `;
+
+  // var articles = await sequelize.query(
+  //   "CALL SP_CHAT_ARTICLE_DISPLAY (:P_DISPLAY_CODE)",
+  //   { replacements: { P_DISPLAY_CODE: searchOption.isDisplayCode } }
+  // );
+
+  // const articles = await sequelize.query(sqlQuery, {
+  //   raw: true,
+  //   type: QueryTypes.SELECT,
+  // });
+
+  // SELECT COUNT(*) FROM Articles
+  const articleCount = await db.Article.count();
 
   console.log("articles : ", articles);
-  res.render("article/list", { articles, searchOption });
+  res.render("article/list", { articles, searchOption, articleCount });
 });
 
 router.post("/list", async (req, res) => {
@@ -98,20 +98,20 @@ router.post("/list", async (req, res) => {
   //   )
   //     return article;
   // });
+  // var articles = await db.Article.findAll({
+  //   where: { board_type_code: searchOption.boardTypeCode },
+  // });
+  // articles = articles.map((arr) => {
+  //   return arr.dataValues;
+  // });
   var articles = await db.Article.findAll({
     where: { board_type_code: searchOption.boardTypeCode },
   });
-  articles = articles.map((arr) => {
-    return arr.dataValues;
-  });
-  // console.log("searchOption : ", searchOption);
-  // console.log(
-  //   "articles_filterd : ",
-  //   JSON.stringify(articles_filtered, null, 2)
-  // );
-  //res.render("article/list", { articles: articles_filtered, searchOption });
-  res.render("article/list", { articles, searchOption });
+
+  const articleCount = await db.Article.count();
+  res.render("article/list", { articles, searchOption, articleCount });
 });
+
 router.get("/create", function (req, res, next) {
   res.render("article/create");
 });

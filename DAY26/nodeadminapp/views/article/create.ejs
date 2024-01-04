@@ -1,16 +1,11 @@
-<!--우측 콘텐츠 헤더영역 -->
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>관리자정보관리</h2>
+    <h2>신규게시글등록</h2>
     <ol class="breadcrumb">
-      <li>
-        <a href="/main">홈</a>
-      </li>
-      <li>
-        <a>관리자정보관리</a>
-      </li>
+      <li><a href="/">Home</a> ></li>
+      <li><a>신규게시글작성</a> ></li>
       <li class="active">
-        <strong>조회</strong>
+        <strong>등록</strong>
       </li>
     </ol>
   </div>
@@ -18,64 +13,102 @@
 </div>
 
 <!--우측 콘텐츠 영역 -->
-<form action="/member/create" method="post">
+<form action="/article/create" id="articleForm" method="post">
   <div class="wrapper wrapper-content">
     <div class="ibox-content m-b-sm border-bottom">
+      <!-- 게시판유형 -->
       <div class="row">
         <div class="col-sm-4">
-          <div class="form-group d-flex flex-column">
-            <label class="control-label">프로필 사진</label>
-            <img class="w-75" src="" alt="" />
-            <button class="w-75" submit="#">변경</button>
-          </div>
-        </div>
-
-        <div class="col-sm-6">
           <div class="form-group">
-            <div>
-              <label class="control-label">이메일</label>
-              <input type="text" class="form-control mb-3" />
-            </div>
-            <div class="form-group">
-              <label class="control-label col-6">이름</label>
-              <input type="text" class="form-control mb-3" />
-            </div>
-            <div class="form-group">
-              <label class="control-label">고유번호</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label class="control-label">전화번호</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label class="control-label">생년월일</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label class="control-label">상태</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label class="control-label">생성일시</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label class="control-label">수정일시</label>
-              <input type="text" class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label class="control-label">수정일시</label>
-              <input type="text" class="form-control" />
-            </div>
+            <label class="control-label">게시판</label>
+            <select
+              name="boardTypeCode"
+              id="boardTypeCode"
+              class="form-control"
+            >
+              <option value="0">선택</option>
+              <option value="1">공지게시판</option>
+              <option value="2">자유게시판</option>
+            </select>
           </div>
         </div>
       </div>
 
+      <!-- 글제목영역 -->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="control-label">글제목</label>
+            <input type="text" name="title" id="title" class="form-control" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 글내용 입력영역 -->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="control-label">글내용</label>
+            <textarea
+              class="form-control"
+              name="contents"
+              id="contents"
+              rows="10"
+              cols="5"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 게시글유형,게시여부,등록자 입력영역 -->
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">게시글유형</label>
+            <select
+              name="articleTypeCode"
+              id="articleTypeCode"
+              class="form-control"
+            >
+              <option value="0">선택</option>
+              <option value="1">상단고정게시글</option>
+              <option value="2">일반게시글</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">게시여부</label>
+            <select
+              name="isDisplayCode"
+              id="isDisplayCode"
+              class="form-control"
+            >
+              <option value="9">선택</option>
+              <option value="1">게시함</option>
+              <option value="0">게시안함</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">작성자명</label>
+            <input
+              type="text"
+              name="register"
+              id="register"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 저장/목록이동 버튼  -->
       <div class="text-center">
         <button type="submit" class="btn btn-primary">저장</button>
-        <a href="/member/list" class="btn btn-info">목록</a>
+        <a href="/article/list" class="btn btn-info">목록</a>
       </div>
     </div>
   </div>

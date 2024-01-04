@@ -14,6 +14,11 @@ var memberRouter = require("./routes/member");
 var channelRouter = require("./routes/channel");
 var messageRouter = require("./routes/message");
 var testRouter = require("./routes/test");
+
+//MongoDB
+const connect = require("./schemas/index");
+connect();
+
 var app = express();
 
 // view engine setup

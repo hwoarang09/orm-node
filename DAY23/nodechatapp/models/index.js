@@ -4,6 +4,14 @@ const Sequelize = require("sequelize");
 //개발모드 환경설정
 const env = process.env.NODE_ENV || "development";
 
+const configMiddle = require(path.join(
+  __dirname,
+  "..",
+  "config",
+  "config.json"
+));
+console.log(`env :  ${env}, process.env.NODE_ENV : ${process.env.NODE_ENV}`);
+console.log(`configMiddle : ${JSON.stringify(configMiddle, null, 2)}`);
 //DB연결 환경설정정보 변경처리//관련정보 수정
 const config = require(path.join(__dirname, "..", "config", "config.json"))[
   env

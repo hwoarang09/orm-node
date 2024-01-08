@@ -4,7 +4,6 @@ const path = require("path");
 const app = express();
 
 //각종 라이브러리
-var moment = require("moment");
 const ChannelMember = require("../schemas/member");
 
 //개인용 util
@@ -16,11 +15,11 @@ router.post("/login", async (req, res, next) => {
 
     const member = await ChannelMember.findOne({ email });
     if (!member) {
-      return res.status(404).send("Member not found in LOGIN");
+      return res.json({ success: false, message: "No member" });
     } else if (member.member_password !== password) {
-      return res.send("Password Wrong");
+      return res.json({ success: false, message: "Password Wrong" });
     } else {
-      return res.send("Login Success");
+      return res.json({ success: true, message: "Login success" });
     }
   } catch (err) {
     console.error("Error in member get:", err);

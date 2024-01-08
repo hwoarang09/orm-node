@@ -20,6 +20,7 @@
             <button type="submit" class="btn btn-primary">Login</button>
           </div>
         </div>
+        <p id="error-message"></p>
         <div class="login-footer">
           <span class="additional-link"
             >No Account?
@@ -30,3 +31,36 @@
     </form>
   </div>
 </div>
+<script>
+  function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          // 로그인 성공 시 다음 동작 수행
+          // 예시: 페이지 리다이렉션 또는 다른 업데이트
+          console.log(data.message);
+        } else {
+          // 로그인 실패 시 에러 메시지 표시
+          document.getElementById("error-message").textContent = data.message;
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+</script>

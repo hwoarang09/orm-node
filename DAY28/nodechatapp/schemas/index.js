@@ -13,5 +13,8 @@ const connect = async function connectToMongoDB() {
 };
 
 require("./channel.js");
+require("./channelMember.js");
+require("./channelMessage.js");
+require("./member.js");
 
 module.exports = connect;

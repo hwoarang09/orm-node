@@ -9,6 +9,7 @@ const ChannelMember = require("../schemas/member");
 //개인용 util
 const { mergeByKey } = require("./utils/utiles");
 
+//login api
 router.post("/login", async (req, res, next) => {
   try {
     var { email, password } = req.body;
@@ -20,6 +21,59 @@ router.post("/login", async (req, res, next) => {
       return res.json({ success: false, message: "Password Wrong" });
     } else {
       return res.json({ success: true, message: "Login success" });
+    }
+  } catch (err) {
+    console.error("Error in member get:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//entry api
+
+router.post("/entry", async (req, res, next) => {
+  try {
+    var new_member = {
+      email: req.body.email,
+      member_password: req.body.member_password,
+      name: req.body.name,
+      profile_img_path: req.body.profile_img_path,
+      telephone: req.body.telephone,
+      entry_type_code: req.body.entry_type_code,
+      use_state_code: req.body.use_state_code,
+      birth_date: req.body.birth_date,
+      reg_date: Date.now(),
+      reg_member_id: req.body.reg_member_id,
+      edit_date: Date.now(),
+      edit_member_id: req.body.edit_member_id,
+    };
+
+    const member = await ChannelMember.findOne({ email: new_member.email });
+    if (member) {
+      return res.json({ success: false, message: "Already Member exists" });
+    } else {
+      var result = await ChannelMember.create(new_member);
+      console.log("create result : ", result);
+      return res.json({ success: true, message: "Create Success" });
+    }
+  } catch (err) {
+    console.error("Error in member entry:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//find api
+router.post("/find", async (req, res, next) => {
+  try {
+    var { email } = req.body;
+
+    const member = await ChannelMember.findOne({ email });
+    if (!member) {
+      return res.json({ success: false, message: "No member ...to find" });
+    } else {
+      return res.json({
+        success: true,
+        message: `${member.email}'s password is ${member.member_password}`,
+      });
     }
   } catch (err) {
     console.error("Error in member get:", err);

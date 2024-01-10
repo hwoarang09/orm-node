@@ -1,8 +1,9 @@
-var express = require("express");
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-router.get("/", function (req, res, next) {
-  res.render("chat/index", { title: "Chat index" });
+/* GET home page. */
+router.get('/', async (req, res, next) => {
+  res.render('chat/index', { layout: 'chatLayout' });
 });
 
 module.exports = router;

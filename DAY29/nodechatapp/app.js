@@ -3,27 +3,29 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const layout = require("express-ejs-layouts");
 
-var expressLayouts = require("express-ejs-layouts");
+var sequelize = require('./models/index.js').sequelize;
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var channelRouter = require("./routes/channel");
 var channelAPIRouter = require("./routes/channelAPI");
 var memberAPIRouter = require("./routes/memberAPI");
+
 var app = express();
+
+sequelize.sync();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
-//레이아웃 설정
 app.set("layout", "layout");
-app.set("layout extractScripts", true); //컨텐츠 페이지 내 script 태그를 레이아웃에 통합할 지 여부
-app.set("layout extractStyles", true); //style
-app.set("layout extractMetas", true); //meta -> 난 메타는 연습 안따라감;;나중에 다시 설명해주신다 다 함.
-app.use(expressLayouts);
+app.set("layout extractScripts", true);
+app.set("layout extractStyles", true);
+app.set("layout extractMetas", true);
 
+app.use(layout);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

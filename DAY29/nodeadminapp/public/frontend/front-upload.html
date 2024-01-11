@@ -10,8 +10,8 @@
     <form>
       파일첨부:<input
         type="file"
-        id="files"
-        name="files"
+        id="file"
+        name="file"
         style="width: 70%"
       /><br />
     </form>
@@ -19,10 +19,10 @@
     <script src="/js/jquery-3.1.1.min.js"></script>
 
     <script>
-      $("#files").change(function () {
+      $("#file").change(function () {
         var data = new FormData();
-        data.append("files", $("input[name=files]")[0].files[0]);
-        var fileName = $("#files").val();
+        data.append("file", $("input[name=file]")[0].files[0]);
+        var fileName = $("#file").val();
         fileName = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
         if (
           fileName != "jpg" &&
@@ -31,13 +31,13 @@
           fileName != "bmp"
         ) {
           alert("이미지 파일은 (jpg, png, gif, bmp) 형식만 등록 가능합니다.");
-          $("#files").val("");
+          $("#file").val("");
           return false;
         } else {
           $.ajax({
             data: data,
             type: "POST",
-            url: "/api/articles/upload",
+            url: "/api/articles/uploadS3",
             cache: false,
             contentType: false,
             processData: false,

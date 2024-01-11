@@ -3,6 +3,7 @@ var router = express.Router();
 
 var moment = require("moment");
 var multer = require("multer");
+var { upload } = require("../common/aws_s3");
 //파일저장위치 지정
 var storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -16,7 +17,7 @@ var storage = multer.diskStorage({
   },
 });
 //일반 업로드처리 객체 생성
-var upload = multer({ storage: storage });
+var simpleupload = multer({ storage: storage });
 //전체리스트 api
 //localhost:3000/api/article/all
 var articles = [
@@ -172,7 +173,7 @@ router.post("/update", async (req, res) => {
 });
 
 //파일업로드
-router.post("/upload", upload.single("file"), async (req, res) => {
+router.post("/upload", simpleupload.single("file"), async (req, res) => {
   var apiResult = {
     code: 200,
     data: [],
@@ -204,6 +205,42 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   res.json(apiResult);
 });
 
+//S3 업로드
+router.post(
+  "/uploadS3",
+  upload.getUpload("upload/").fields([{ name: "file", maxCount: 1 }]),
+  async (req, res) => {
+    var apiResult = {
+      code: 200,
+      data: [],
+      result: "Ok",
+    };
+
+    try {
+      const uploadFile = req.files.file[0];
+      let filePath = "/upload/" + uploadFile.filename;
+      var fileName = uploadFile.filename;
+      var fileOrignalName = uploadFile.originalname;
+      var fileSize = uploadFile.size;
+      var fileType = uploadFile.mimetype;
+
+      apiResult.data = {
+        filePath,
+        fileName,
+        fileOrignalName,
+        fileSize,
+        fileType,
+      };
+      apiResult.code = 200;
+      apiResult.result = "Ok";
+    } catch (err) {
+      apiResult.code = 500;
+      apiResult.result = "failed";
+      apiResult.data = {};
+    }
+    res.json(apiResult);
+  }
+);
 //단일게시글 조회 api
 //localhost:3000/api/article/1
 router.get("/:aidx", async (req, res) => {

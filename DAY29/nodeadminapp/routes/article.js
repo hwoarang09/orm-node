@@ -3,6 +3,10 @@ var router = express.Router();
 
 var moment = require("moment");
 var multer = require("multer");
+
+//s3전용 업로드 객체 참조
+
+var { upload } = require("../common/aws_s3");
 //파일저장위치 지정
 var storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -16,7 +20,7 @@ var storage = multer.diskStorage({
   },
 });
 //일반 업로드처리 객체 생성
-var upload = multer({ storage: storage });
+var simpleupload = multer({ storage: storage });
 
 //ORM db객체를 참조
 var db = require("../models/index");
@@ -27,7 +31,7 @@ router.get("/upload", async (req, res, next) => {
   res.render("article/upload");
 });
 //FORM 기반 파일 업로드 처리
-router.post("/upload", upload.single("file"), async (req, res, next) => {
+router.post("/upload", simpleupload.single("file"), async (req, res, next) => {
   var title = req.body.title;
   var contents = req.body.contents;
   //업로드된 파일정보 추출
@@ -75,7 +79,7 @@ router.get("/create", async (req, res, next) => {
 });
 
 //신규 게시글 정보를 등록처리
-router.post("/create", upload.single("file"), async (req, res, next) => {
+router.post("/create", simpleupload.single("file"), async (req, res, next) => {
   var title = req.body.title;
   var contents = req.body.contents;
   var articleTypeCode = req.body.articleTypeCode;
@@ -96,10 +100,67 @@ router.post("/create", upload.single("file"), async (req, res, next) => {
   };
 
   var registedArticle = await db.Article.create(article);
+  console.log("regstsetartice : ", registedArticle);
+  const uploadFile = req.file;
+  console.log("uploadFile : ", uploadFile);
+  if (uploadFile) {
+    let filePath = "/upload/" + uploadFile.filename;
+    var fileName = uploadFile.filename;
+    var fileOrignalName = uploadFile.originalname;
+    var fileSize = uploadFile.size;
+    var fileType = uploadFile.mimetype;
+
+    var file = {
+      article_id: registedArticle.article_id,
+      file_name: fileOrignalName,
+      file_size: fileSize,
+      file_path: filePath,
+      file_type: fileType,
+      reg_date: Date.now(),
+      reg_member_id: 1,
+    };
+    console.log("file : ", file);
+    let ret = await db.ArticleFile.create(file);
+    console.log("ret : ", ret);
+  }
 
   res.redirect("/article/list");
 });
 
+//s3에 파일업로드
+router.post(
+  "/creates3",
+  upload.getUpload("upload/").fields([{ name: "file", maxCount: 1 }]),
+  async (req, res, next) => {
+    var title = req.body.title;
+    var contents = req.body.contents;
+    var articleTypeCode = req.body.articleTypeCode;
+    var isDisplayCode = req.body.isDisplayCode;
+
+    var article = {
+      board_type_code: 2,
+      title,
+      contents,
+      article_type_code: articleTypeCode,
+      view_count: 0,
+      is_display_code: isDisplayCode,
+      ip_address: "111.111.111.111",
+      reg_date: Date.now(),
+      reg_member_id: 0,
+      edit_date: Date.now(),
+      edit_member_id: 0,
+    };
+    const uploadFile = req.files.file[0];
+    var filePath = "/upload/" + uploadFile.filename;
+    var fileName = uploadFile.filename;
+    var fileOrignalName = uploadFile.originalname;
+    var fileSize = uploadFile.size;
+    var fileType = uploadFile.mimetype;
+    var registedArticle = await db.Article.create(article);
+
+    res.redirect("/article/list");
+  }
+);
 //기존 게시글 정보를 삭제처리
 router.get("/delete", async (req, res, next) => {
   var articleIdx = req.query.aid;

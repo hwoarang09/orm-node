@@ -34,5 +34,13 @@ db.Messages = require("./message.js")(sequelize, Sequelize);
 db.Article = require("./article.js")(sequelize, Sequelize);
 db.ArticleFile = require("./articleFile.js")(sequelize, Sequelize);
 
+db.Article.hasMany(db.ArticleFile, {
+  foreignKey: "article_id",
+  sourceKey: "article_id",
+});
+db.ArticleFile.belongsTo(db.Article, {
+  foreignKey: "article_id",
+  targetKey: "article_id",
+});
 //db객체 외부로 노출하기
 module.exports = db;

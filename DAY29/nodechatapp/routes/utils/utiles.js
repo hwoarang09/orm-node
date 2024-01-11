@@ -11,8 +11,9 @@ const mergeByKey = async (
   bcrypt_keys = [],
   aes_keys = []
 ) => {
-  let ret = await Object.keys(baseObj).reduce(async (promise, key) => {
+  return await Object.keys(baseObj).reduce(async (promise, key) => {
     let result = await promise;
+
     if (bcrypt_keys.includes(key))
       result[key] = await bcrypt.hash(otherObj[key], 12);
     else if (aes_keys.includes(key))
@@ -20,8 +21,8 @@ const mergeByKey = async (
     else result[key] = otherObj[key];
     return result;
   }, baseObj);
-  return ret;
 };
+
 //channel_id : 채널이름
 //매칭 오브젝트
 var channel_id_value_obj = {

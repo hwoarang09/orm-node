@@ -29,15 +29,18 @@
 
 <!--우측 콘텐츠 영역 -->
 <div class="wrapper wrapper-content">
-  <form action="/article/create" method="post" id="articleForm">
+  <form
+    action="/article/create"
+    method="post"
+    id="articleForm"
+    enctype="multipart/form-data"
+  >
     <div class="ibox-content m-b-sm border-bottom">
-
-
       <div class="row">
         <div class="col-sm-12">
           <div class="form-group">
             <label class="control-label">게시글 제목</label>
-            <input type="text" name="title" id="title" class="form-control">
+            <input type="text" name="title" id="title" class="form-control" />
           </div>
         </div>
       </div>
@@ -46,7 +49,8 @@
         <div class="col-sm-12">
           <div class="form-group">
             <label class="control-label">글내용</label>
-            <textarea name="contents" id="contents" cols="30" rows="10" class="form-control"></textarea>
+            <!--summernote-->
+            <div class="summernote"></div>
           </div>
         </div>
       </div>
@@ -55,30 +59,47 @@
         <div class="col-sm-4">
           <div class="form-group">
             <label class="control-label">게시글 유형</label>
-            <select name="articleTypeCode" id="articleTypeCode" class="form-control">
-            <option value="1" >고정게시글</option>
-            <option value="0" selected>일반게시글</option>
-          </select>
+            <select
+              name="articleTypeCode"
+              id="articleTypeCode"
+              class="form-control"
+            >
+              <option value="1">고정게시글</option>
+              <option value="0" selected>일반게시글</option>
+            </select>
           </div>
         </div>
         <div class="col-sm-4">
           <div class="form-group">
             <label class="control-label">게시여부</label>
-            <select name="isDisplayCode" id="isDisplayCode" class="form-control">
-            <option value="1" selected>게시함</option>
-            <option value="0">게시안함</option>
-          </select>
+            <select
+              name="isDisplayCode"
+              id="isDisplayCode"
+              class="form-control"
+            >
+              <option value="1" selected>게시함</option>
+              <option value="0">게시안함</option>
+            </select>
           </div>
         </div>
         <div class="col-sm-4">
           <div class="form-group">
             <label class="control-label">등록일시</label>
-            <input type="text" class="form-control" disabled>
+            <input type="text" class="form-control" disabled />
           </div>
         </div>
       </div>
 
-
+      <div class="row">
+        <div class="col-sm-4">
+          파일첨부:<input
+            type="filez"
+            name="filez"
+            id="filez"
+            style="width: 70%"
+          /><br />
+        </div>
+      </div>
       <div class="text-center">
         <button type="submit" class="btn btn-primary">저장</button>
         <a href="/article/list" class="btn btn-info">목록</a>
@@ -86,3 +107,55 @@
     </div>
   </form>
 </div>
+<script>
+  $(document).ready(function () {
+    //기본 설정
+    //$(".summernote").summernote();
+
+    $(".summernote").summernote({
+      height: 300, //기본높이
+      minHeight: 250, //최소높이
+      maxHeight: 500, //최대높이
+      focus: false,
+      lang: "en-US", //기본적으로는 en-US인데 ko-KR도 됨
+      toolbar: [
+        ["style", ["style"]],
+        ["font", ["fontsize", "bold", "underline", "clear"]],
+        ["height", ["height"]],
+        ["color", ["color"]],
+        ["table", ["table"]],
+        ["para", ["ul", "ol", "paragraph"]],
+        ["insert", ["picture", "link", "video"]],
+        ["view", ["codeview", "help"]],
+      ],
+      //중요한 건 여기임
+      //이미지를 업로드를 할 때, 이 함수가 실행될거임.
+      //첫 함수는 이름없는거고. 우리가 구현하는 건 sendFile임.
+      callbacks: {
+        onImageUpload: function (files) {
+          for (var i = 0; i < files.length; i++) {
+            sendFile(files[i], this);
+          }
+        },
+      },
+    });
+  });
+
+  function sendFile(file, editor) {
+    var data = new FormData();
+    data.append("file", file);
+
+    $.ajax({
+      data: data,
+      type: "POST",
+      url: "/api/articles/upload",
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (result) {
+        console.log(result);
+        $(editor).summernote("insertImage", result.data.filePath);
+      },
+    });
+  }
+</script>

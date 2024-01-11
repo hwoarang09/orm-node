@@ -19,6 +19,7 @@ const channelRouter = require("./routes/channel");
 const memberRouter = require("./routes/member");
 const messageRouter = require("./routes/message");
 const articleRouter = require("./routes/article");
+const articleAPIRouter = require("./routes/articleAPI");
 
 //var articleAPIRouter = require("./routes/articleAPI");
 
@@ -50,6 +51,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/admin", adminRouter);
 app.use("/article", articleRouter);
+app.use("/api/articles", articleAPIRouter);
 app.use("/channel", channelRouter);
 app.use("/member", memberRouter);
 app.use("/message", messageRouter);

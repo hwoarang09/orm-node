@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JWT 토큰값 확인하기</title>
+  </head>
+  <body>
+    <h1>전달된 JWT토큰값 확인하기</h1>
+    <form>
+      사용자아이디 :
+      <input
+        type="text"
+        name="userid"
+        id="userid"
+        value="<%= jsonTokenData.userid%>"
+      /><br />
+      메일주소 :
+      <input
+        type="text"
+        name="email"
+        id="email"
+        value="<%= jsonTokenData.email%>"
+      /><br />
+      사용자유형 :
+      <input
+        type="text"
+        name="usertype"
+        id="usertype"
+        value="<%= jsonTokenData.usertype%>"
+      /><br />
+      이름 :
+      <input
+        type="text"
+        name="name"
+        id="name"
+        value="<%= jsonTokenData.name%>"
+      /><br />
+      전화번호 :
+      <input
+        type="text"
+        name="telephone"
+        id="telephone"
+        value="<%= jsonTokenData.telephone%>"
+      /><br />
+
+      <hr />
+      전달된 토큰값 : <%=token%>
+    </form>
+  </body>
+</html>

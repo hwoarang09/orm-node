@@ -8,10 +8,10 @@ let Op = db.Sequelize.Op;
 const bcrypt = require("bcryptjs");
 const aes = require("mysql-aes");
 //각종 라이브러리
-
+var jwt = require("jsonwebtoken");
 //개인용 util
 const { mergeByKey } = require("./utils/utiles");
-
+const { tokenAuthChecking } = require("./apiMiddleware");
 //login api
 //에러처리
 //1. http://localhost:3000/api/member/login/1 -> 정의되지 않은 라우터경로 처리
@@ -28,24 +28,41 @@ const { mergeByKey } = require("./utils/utiles");
 router.post("/login", async (req, res, next) => {
   try {
     let { email, password } = req.body;
+    console.log(email, password);
     email = aes.encrypt(email, process.env.MYSQL_AES_KEY);
     const member = await db.Member.findOne({
       where: {
         email,
       },
     });
-
+    console.log("member :", member);
     if (!member)
-      return res.status(400).json({ success: false, message: "No member" });
-
-    let passwordResult = await bcrypt.compare(password, member.member_password);
-
-    if (!passwordResult)
       return res
         .status(400)
-        .json({ success: false, message: "Password Wrong" });
-    else
-      return res.status(200).json({ success: true, message: "Login success" });
+        .json({ code: 400, success: false, msg: "NotExistEmail" });
+
+    let passwordResult = await bcrypt.compare(password, member.member_password);
+    var memberTokenData = {
+      member_id: member.member_id,
+      email: member.email,
+      name: member.name,
+      profile_img_path: member.profile_img_path,
+      telephone: member.telephone,
+    };
+
+    var token = await jwt.sign(memberTokenData, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+      issuer: "msoftware",
+    });
+    console.log("token : ", token);
+    if (!passwordResult) {
+      return res
+        .status(400)
+        .json({ code: 400, success: false, msg: "NotCorrectword", token });
+    } else
+      return res
+        .status(200)
+        .json({ code: 200, success: true, msg: "Login success", token });
   } catch (err) {
     console.error("Error in member POST /login:", err);
     res.status(500).send("Internal Server Error");
@@ -243,6 +260,57 @@ router.post("/delete", async (req, res, next) => {
 //1. http://localhost:3000/api/member/asd -> catch문
 //2. http://localhost:3000/api/member/ -> 정의되지 않은 라우터경로 처리
 //3. http://localhost:3000/api/member/999 -> member not found 처리
+
+//현재 로그인한 유저의 정보를 token기반으로 출력
+//로그인시 발급한 jwt토큰은 http header 영역에 포함되어 전달됨
+router.get("/profile", tokenAuthChecking, async (req, res, next) => {
+  console.log("/profile   start!!");
+  var apiResult = {
+    code: 400,
+    data: null,
+    msg: "",
+  };
+
+  try {
+    console.log("/profile   try!!");
+    //웹브라우저 헤더에서 사용자 jwt인증토큰값을 추출한다.
+    var token = req.headers.authorization.split("Bearer ")[1];
+    var tokenJsonData = await jwt.verify(token, process.env.JWT_SECRET);
+    var loginMemberId = tokenJsonData.member_id;
+    var loginMemberEmail = tokenJsonData.email;
+
+    console.log("/profile   before dbMember!!");
+    //최신의 정보를 가져오려고. 처음 로긴한 후 중간에 바꿨을 수도 있으니까.
+    var dbMember = await db.Member.findOne({
+      where: { member_id: loginMemberId },
+      attributes: [
+        "email",
+        "name",
+        "profile_img_path",
+        "telephone",
+        "birth_date",
+      ],
+    });
+
+    dbMember.telephone = aes.decrypt(
+      dbMember.telephone,
+      process.env.MYSQL_AES_KEY
+    );
+    dbMember.email = aes.decrypt(dbMember.email, process.env.MYSQL_AES_KEY);
+    apiResult.code = 200;
+    apiResult.data = dbMember;
+    apiResult.msg = "Ok";
+  } catch (err) {
+    apiResult.code = 500;
+    apiResult.data = null;
+    apiResult.msg = "Failed";
+  }
+
+  res.json(apiResult);
+});
+//아래의 에러처리 코드는 무조건 router정의가 다 끝난 최하단에 위치해야 함.
+//위에서 정의하지 않은 라우터에 대한 모든 요청에 대해서
+//Error 객체를 생성하는 아래의 미들웨어를 실행한다.
 router.get("/:mid", async (req, res, next) => {
   try {
     let member_id = req.params.mid;
@@ -265,9 +333,6 @@ router.get("/:mid", async (req, res, next) => {
   }
 });
 
-//아래의 에러처리 코드는 무조건 router정의가 다 끝난 최하단에 위치해야 함.
-//위에서 정의하지 않은 라우터에 대한 모든 요청에 대해서
-//Error 객체를 생성하는 아래의 미들웨어를 실행한다.
 router.use((req, res, next) => {
   const error = new Error("정의되지 않은 라우터 경로입니다.");
   error.status = 404;

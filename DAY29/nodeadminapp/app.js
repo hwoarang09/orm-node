@@ -3,7 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
+var session = require("express-session");
 //환경설정팡리 호출하기: 전역정보로 설정됨
 require("dotenv").config();
 
@@ -39,6 +39,19 @@ app.set("layout", "layout");
 app.set("layout extractScripts", true); //컨텐츠 페이지 내 script 태그를 레이아웃에 통합할 지 여부
 app.set("layout extractStyles", true); //style
 app.set("layout extractMetas", true); //meta -> 난 메타는 연습 안따라감;;나중에 다시 설명해주신다 다 함.
+
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: true,
+    secret: "testsecret",
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000 * 60 * 5, //5분동안 서버세션을 유지하겠다.(1000은 1초)
+    },
+  })
+);
 app.use(expressLayouts);
 
 app.use(logger("dev"));

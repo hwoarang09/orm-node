@@ -4,7 +4,9 @@ var db = require("../models/index");
 var Op = db.Sequelize.Op;
 const bcrypt = require("bcryptjs");
 const aes = require("mysql-aes");
-
+const jwt = require("jsonwebtoken");
+const { json } = require("sequelize");
+const member = require("../models/member");
 /* GET home page. */
 
 router.get("/", async (req, res, next) => {
@@ -13,15 +15,18 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { email, member_password } = req.body;
-    email = aes.decrypt(email, process.env.MYSQL_AES_KEY);
+    var { email, member_password } = req.body;
+    console.log(email, member_password);
+    email = aes.encrypt(email, process.env.MYSQL_AES_KEY);
 
     const getMember = await db.Member.findOne({ where: { email } });
+    console.log("getMember :", getMember);
+    if (!getMember) res.redirect("/");
     let passwordResult = await bcrypt.compare(
       member_password,
-      getMember.admin_password
+      getMember.member_password
     );
-    if (getMember && passwordResult) {
+    if (passwordResult) {
       res.redirect("/chat");
     } else {
       res.redirect("/");
@@ -69,4 +74,44 @@ router.post("/find", async (req, res) => {
   res.redirect("login");
 });
 
+//JWT토큰 생성 웹페이지 요청화 응답
+router.get("/maketoken", async (req, res, next) => {
+  var token = "";
+  res.render("maketoken", { layout: false, token });
+});
+
+//JWT 토큰 생성하고 토큰 확인하기
+router.post("/maketoken", async (req, res) => {
+  var token = "";
+
+  //jwt 토큰에 담을 json 데이터 구조 및 데이터 바인딩
+  //jwt 토큰 영역내 payload 영역에 담깁니다.
+  var jsonTokenData = ({ usrid, email, usertype, name, telephone } = req.body);
+  token = jwt.sign(jsonTokenData, process.env.JWT_SECRET, {
+    expiresIn: "24h",
+    issuer: "msoftware",
+  });
+  res.render("maketoken", { layout: false, token });
+});
+
+//127.0.0.1:3000/readtoken?token=토큰값
+//이거는 query방식
+router.get("/readtoken", async (req, res, next) => {
+  var token = req.query.token;
+
+  try {
+    var jsonTokenData = await jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    token = "유효하지 않은 토큰";
+    var jsonTokenData = {
+      usrid: "",
+      email: "",
+      usertype: "",
+      name: "",
+      telephone: "",
+    };
+  }
+
+  res.render("readtoken", { layout: false, token, jsonTokenData });
+});
 module.exports = router;

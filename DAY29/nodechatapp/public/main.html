@@ -1366,7 +1366,11 @@
                         <div class="account-settings-body">
                           <div class="upload-profile">
                             <div class="upload-profile-image">
-                              <img src="img/user2.png" alt="Profile Image" />
+                              <img
+                                id="profile_img"
+                                name="profile_img"
+                                alt="Profile Image"
+                              />
                             </div>
                             <div class="field-wrapper">
                               <div class="custom-file">
@@ -1385,20 +1389,32 @@
                           </div>
 
                           <div class="field-wrapper">
-                            <input type="text" value="Jeivxezer Lopexz" />
+                            <input
+                              type="text"
+                              name="member_name"
+                              id="member_name"
+                              value=""
+                            />
                             <div class="field-placeholder">Full Name</div>
                           </div>
 
                           <div class="field-wrapper">
                             <input
                               type="email"
-                              value="jeivxezer-lopexz@email.com"
+                              name="member_email"
+                              id="member_email"
+                              value=""
                             />
                             <div class="field-placeholder">Email</div>
                           </div>
 
                           <div class="field-wrapper m-0">
-                            <input type="text" value="0 0000 00000" />
+                            <input
+                              type="text"
+                              name="member_telephone"
+                              id="member_telephone"
+                              value=""
+                            />
                             <div class="field-placeholder">Contact</div>
                           </div>
                         </div>
@@ -2211,5 +2227,32 @@
 
     <!-- Main Js Required -->
     <script src="js/main.js"></script>
+    <script>
+      //환경설정 아이콘 클릭시 백엔드에서 프로필정보 조회 바인딩하기
+      $("#settings-tab").click(function () {
+        var loginUserToken = localStorage.getItem("userauthtoken");
+        $.ajax({
+          type: "GET",
+          url: "/api/member/profile",
+          headers: {
+            Authorization: `Bearer ${loginUserToken}`,
+          },
+          dataType: "json",
+
+          success: function (result) {
+            console.log("백엔드호출 API 호출 결과 : ", result);
+            if (result.code == 200) {
+              $("#member_email").val(result.data.email);
+              $("#member_name").val(result.data.name);
+              $("#member_telephone").val(result.data.telephone);
+              $("#profile_img").attr("src", result.data.profile_img_path);
+            }
+          },
+          error: function (err) {
+            console.log("백엔드호출 API 호출 에러 발생 : ", err);
+          },
+        });
+      });
+    </script>
   </body>
 </html>

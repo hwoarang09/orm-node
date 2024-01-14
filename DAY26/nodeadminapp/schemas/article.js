@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const AutoIncrement = require("mongoose-sequence")(mongoose);
+const mongoose = require('mongoose');
 
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
 
 const articleSchema = new Schema({
@@ -14,7 +14,7 @@ const articleSchema = new Schema({
   },
   contents: {
     type: String,
-    required: false,
+    required: true,
   },
   view_count: {
     type: Number,
@@ -31,6 +31,7 @@ const articleSchema = new Schema({
   edit_date: {
     type: Date,
     default: Date.now,
+    required: false,
   },
   edit_member_id: {
     type: Number,
@@ -38,6 +39,6 @@ const articleSchema = new Schema({
   },
 });
 
-articleSchema.plugin(AutoIncrement, { inc_field: "article_id" }); //article_id는 1,2,3,4..
+articleSchema.plugin(AutoIncrement, { inc_field: 'article_id' });
 
-module.exports = mongoose.model("Article", articleSchema);
+module.exports = mongoose.model('Article', articleSchema);

@@ -1,18 +1,12 @@
-<div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-10">
-    <h2>신규게시글등록</h2>
-    <ol class="breadcrumb">
-      <li><a href="/">Home</a> ></li>
-      <li><a>신규게시글작성</a> ></li>
-      <li class="active">
-        <strong>등록</strong>
-      </li>
-    </ol>
-  </div>
-  <div class="col-lg-2"></div>
-</div>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
 
-<!--우측 콘텐츠 영역 -->
+<link href="/css/animate.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+
+<!--추가 스타일-->
+
+<!--우측 콘텐츠 헤더영역 -->
 <form action="/article/create" id="articleForm" method="post">
   <div class="wrapper wrapper-content">
     <div class="ibox-content m-b-sm border-bottom">
@@ -113,3 +107,58 @@
     </div>
   </div>
 </form>
+
+<script>
+  //모두 렌더링이 완료된 시점에 발생 $(document).ready();
+  $(document).ready(function () {
+    $('#boardTypeCode').focus();
+    console.log('게시글 등록 웹페이지가 웹브라우저에 모두 렌더링 되었습니다. ');
+  });
+
+  //유효성검사(Validation Check)
+  $('#articleForm').submit(function () {
+    //debugger;
+
+    console.log('게시판유형 선택코드:', $('#boardTypeCode').val());
+
+    //게시판 유형값 선택여부 체크
+    if ($('#boardTypeCode').val() == '0') {
+      alert('게시판 유형을 선택해주세요.');
+      $('#boardTypeCode').focus();
+      return false;
+    }
+
+    //제목 입력요소 유효성 검사
+    if ($('#title').val() == '') {
+      alert('제목을 선택해주세요.');
+      $('#title').focus();
+      return false;
+    }
+
+    //게시글 유형코드 선택여부 체크
+    if ($('#articleTypeCode').val() == '0') {
+      alert('게시글 유형을 선택해주세요.');
+      $('#articleTypeCode').focus();
+      return false;
+    }
+
+    //게시여부 선택 체크
+    if ($('#isDisplayCode').val() == '9') {
+      alert('게시여부를 선택해주세요.');
+      $('#isDisplayCode').focus();
+      return false;
+    }
+
+    //작성자 입력여부 체크
+    if ($('#register').val() == '') {
+      alert('작성자명을 입력해주세요.');
+      $('#register').focus();
+      return false;
+    }
+
+    //웹브라우저에서 서버로 데이터를 전송 전 클라이언트 디버깅 걸기
+    //debugger;
+
+    return true;
+  });
+</script>

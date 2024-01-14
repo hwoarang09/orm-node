@@ -1,21 +1,18 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-/* GET home page. */
 router.get("/", function (req, res, next) {
-  console.log("index");
-  res.render("index", { title: "Express" });
+  res.render("login", { layout: false });
 });
 
-router.get("/test", function (req, res, next) {
-  res.render("index", { title: "Express index test" });
+router.get("/login", async (req, res) =>
+  res.render("login", { layout: false })
+);
+
+router.post("/login", async (req, res) => {
+  res.redirect("main");
 });
 
-router.get("/login", function (req, res, next) {
-  res.render("login", { layout: false, title: "login get" });
-});
+router.get("/main", async (req, res) => res.render("main"));
 
-router.post("/login", function (req, res, next) {
-  res.redirect("/");
-});
 module.exports = router;

@@ -1,104 +1,110 @@
-  <!-- 게시글 조회 옵션 입력 영역  -->
-  <form action="/article/list" method="post" id="searchForm">
-    <div class="ibox-content m-b-sm border-bottom">
-        
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="control-label" for="OrderNo">게시판</label>
-                    <select name="boardTypeCode" id="boardTypeCode" class="form-control">
-                        <option value="0" <% if( searchOption.boardTypeCode == "0"){ %> selected <% } %> >전체</option>
-                        <option value="1" <% if( searchOption.boardTypeCode == "1"){ %> selected <% } %>>공지게시판</option>
-                        <option value="2" <% if( searchOption.boardTypeCode == "2"){ %> selected <% } %>>기술블로깅</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="control-label" for="OrderName">제목</label>
-                    <input type="text" name="title" value="<%=searchOption.title%>" class="form-control">
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="control-label" for="MobileNo">게시여부</label>
-                    <select name="isDisplayCode" class="form-control">
-                        <option value="9" <% if( searchOption.isDisplayCode == "9"){ %> selected <% } %> >전체</option>
-                        <option value="1" <% if( searchOption.isDisplayCode == "1"){ %> selected <% } %> >게시함</option>
-                        <option value="0" <% if( searchOption.isDisplayCode == "0"){ %> selected <% } %> >게시안함</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="text-center">
-            <input type="submit" class="btn btn-primary" value="조회" />
-            <a href="/article/create" class="btn btn-info">신규</a>
-        </div>
-    </div>
-</form>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- 게시글 조회결과 목록 표시영역  -->
-<div class="row">
+  <title>INSPINIA | Main view</title>
+
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="/css/animate.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!--추가 스타일-->
+</head>
+
+<!--우측 상단 헤더 영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>사용자 정보 관리</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/Home/Index">홈</a>
+      </li>
+      <li>
+        <a>사용자 정보 관리</a>
+      </li>
+      <li class="active">
+        <strong>조회</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2"></div>
+</div>
+
+<!--우측 콘텐츠 영역 -->
+<div class="wrapper wrapper-content">
+  <div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="control-label" for="OrderNo">사용자 명</label>
+          <input type="text" class="form-control" />
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="control-label" for="OrderName">아이디</label>
+          <input type="text" class="form-control" />
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="control-label" for="MobileNo">사용여부</label>
+          <input type="text" class="form-control" />
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <button type="button" class="btn btn-primary">조회</button>
+      <a href="/article/create" class="btn btn-info">신규</a>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <div class="table-responsive">
-
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th width="5%">순번</th>
-                                <th width="10%">게시판구분</th>
-                                <th width="50%">제목</th>
-                                <th width="5%">조회수</th>
-                                <th width="5%">IP주소</th>
-                                <th width="5%">게시상태</th>
-                                <th width="10%">등록일자</th>
-                            </tr>
-                        </thead>
-                        
-                        <tbody class="hoverTblBody">
-
-
-                            <% for(var i =0;i<articles.length;i++){ %>
-                               
-                                <tr>
-                                    <td><%=articles[i].article_id%></td>
-                                    
-                                    <td>
-                                        <% if(articles[i].board_type_code == 1){%>
-                                            공지게시판
-                                        <% } else{ %>
-                                            자유게시판
-                                        <% }%>
-                                    </td>
-                                    
-                                    <td><a href="/article/modify/<%=articles[i].article_id%>"><%=articles[i].title%></a></td>
-                                    <td><%=articles[i].view_count%></td>
-                                    <td><%=articles[i].ip_address%></td>
-                                    
-                                    <td>
-                                        <% if(articles[i].is_display_code == 1){%>
-                                            게시함
-                                        <% } else{ %>
-                                            게시안함
-                                        <% }%>
-                                    </td>
-                                    
-                                    
-                                    <td><%=moment(articles[i].edit_date).format('YYYY-MM-DD HH:mm')%></td>
-                                </tr>
-
-                           <% } %>
-                           
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
+      <div class="ibox float-e-margins">
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th width="10%">게시글 고유번호</th>
+                  <th width="5%">게시판 구분 코드</th>
+                  <th width="10%">글 제목</th>
+                  <th width="10%">글 내용</th>
+                  <th width="10%">조회수</th>
+                  <th width="5%">IP주소</th>
+                  <th width="10%">등록일시</th>
+                  <th width="10%">등록자 고유 번호</th>
+                  <th width="10%">수정일시</th>
+                  <th width="10%">수정자 고유 번호</th>
+                </tr>
+              </thead>
+              <tbody class="hoverTblBody">
+                <% for (let i = 0; i < articles.length; i ++) { %>
+                <tr>
+                  <td>
+                    <a href="/article/modify/<%= articles[i].article_id %>"
+                      ><%= articles[i].article_id %></a
+                    >
+                  </td>
+                  <td><%= articles[i].board_type_code %></td>
+                  <td><%= articles[i].title %></td>
+                  <td><%= articles[i].contents %></td>
+                  <td><%= articles[i].view_count %></td>
+                  <td><%= articles[i].ip_address %></td>
+                  <td><%= articles[i].reg_date %></td>
+                  <td><%= articles[i].reg_member_id %></td>
+                  <td><%= articles[i].edit_date %></td>
+                  <td><%= articles[i].edit_member_id %></td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-
+  </div>
 </div>

@@ -1,16 +1,26 @@
+<head>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="/css/animate.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!--추가 스타일-->
+</head>
+
 <!--우측 콘텐츠 헤더영역 -->
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>신규 멤버 등록</h2>
+    <h2>관리자정보관리</h2>
     <ol class="breadcrumb">
       <li>
-        <a href="/">Home-></a>
-      </li>
+        <a href="/main">홈</a>
+      </li>>
       <li>
-        <a>신규 멤버 등록-></a>
-      </li>
+        <a>관리자정보관리</a>
+      </li>>
       <li class="active">
-        <strong>등록</strong>
+        <strong>조회</strong>
       </li>
     </ol>
   </div>
@@ -18,139 +28,107 @@
 </div>
 
 <!--우측 콘텐츠 영역 -->
-<form action="/member/create" id="articleForm" method="post">
+<form action="/member/create" id="memberForm" method="post">
   <div class="wrapper wrapper-content">
     <div class="ibox-content m-b-sm border-bottom">
       <div class="row">
         <div class="col-sm-4">
-          <div class="form-group">
-            <label class="control-label">가입 유형</label>
-            <select
-              name="entry_type_code"
-              id="entry_type_code"
-              class="form-control"
-            >
-              <option value="9">전체</option>
-              <option value="0">관리자</option>
-              <option value="1">일반유저</option>
-            </select>
+          <div class="form-group d-flex flex-column">
+            <label class="control-label">프로필 사진</label>
+            <img class="w-75" src="" alt="" />
+            <button class="w-75" submit="#">변경</button>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="form-group">
-            <label class="control-label">이름</label>
-            <input type="text" name="name" id="name" class="form-control" />
-          </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
           <div class="form-group">
-            <label class="control-label">폰 번호</label>
-            <input
-              type="text"
-              name="telephone"
-              id="telephone"
-              class="form-control"
-            />
+            <div>
+              <label class="control-label col-6">이메일</label>
+              <input type="text" name="email" id="email" class="form-control mb-3" />
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">이름</label>
+              <input type="text" name="name" id="name" class="form-control mb-3" />
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">암호</label>
+              <input type="password" name="member_password" id="member_password" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">전화번호</label>
+              <input type="text" name="telephone" id="telephone" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">생년월일</label>
+              <input type="text" name="birth_date" id="birth_date" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">상태</label>
+              <select name="use_state_code" id="use_state_code" class="form-control">
+                <option value="9">선택</option>
+                <option value="0">미사용</option>
+                <option value="1">사용중</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">가입일시</label>
+              <input type="date" name="reg_date" id="reg_date" class="form-control" readonly />
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="form-group">
-            <label class="control-label">게시글 유형</label>
-            <select
-              name="articleTypeCode"
-              id="articleTypeCode"
-              class="form-control"
-            >
-              <option value="0">선택해요</option>
-              <option value="1">상단고정</option>
-              <option value="2">일반</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="form-group">
-            <label class="control-label">게시여부</label>
-            <select
-              name="isDisplayCode"
-              id="isDisplayCode"
-              class="form-control"
-            >
-              <option value="0">전체</option>
-              <option value="1">Y</option>
-              <option value="2">N</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="form-group">
-            <label class="control-label">작성자명</label>
-            <input
-              type="text"
-              name="register"
-              id="register"
-              class="form-control"
-            />
-          </div>
-        </div>
-      </div>
-
       <div class="text-center">
         <button type="submit" class="btn btn-primary">저장</button>
-        <a href="/article/list" class="btn btn-info">목록</a>
+        <a href="/member/list" class="btn btn-info">목록</a>
       </div>
     </div>
   </div>
 </form>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  //html페이지가 브라우저에서 렌더링이 다 됐으면 발생하는 이벤트
-  $(document).ready(function () {
-    $("#boardTypeCode").focus();
-    console.log("렌더링완료. create");
-  });
+  
+  document.getElementById('reg_date').value = new Date().toISOString().slice(0, 10);
 
-  //articleForm에서 submit이 발생하면 function실행.
-  $("#articleForm").submit(function () {
-    //debugger;
-    if ($("#boardTypeCode").val() === "0") {
-      alert("선택해");
-      $("#boardTypeCode").focus();
+  $('#memberForm').submit(function () {
+    //유효성 검사(*현재 오작동*)
+    alert('test');
+  
+    if ($('#name').val() === "") {
+      alert('이름을 입력해주세요.');
+      $('#name').focus();
       return false;
     }
-    if ($("#title").val() === "") {
-      alert("제목입력해");
-      $("#title").focus();
+
+    if ($('#member_password').val() === "") {
+      alert('비밀번호를 입력해주세요.');
+      $('#member_password').focus();
       return false;
     }
-    if ($("#contents").val() === "") {
-      alert("내용입력해");
-      $("#contents").focus();
+
+    if ($('#email').val() === "") {
+      alert('email을 입력해주세요.');
+      $('#email').focus();
       return false;
     }
-    if ($("#articleTypeCode").val() === "0") {
-      alert("게시유형 선택해");
-      $("#articleTypeCode").focus();
+
+    if ($('#telephone').val() === "") {
+      alert('전화번호를 입력해주세요.');
+      $('#telephone').focus();
       return false;
     }
-    if ($("#isDisplayCode").val() === "0") {
-      alert("게시여부 선택해");
-      $("#isDisplayCode").focus();
+
+    if ($('#birth_date').val() === "") {
+      alert('생년월일을 입력해주세요.');
+      $('#birth_date').focus();
       return false;
     }
-    if ($("#register").val() === "") {
-      alert("작성자명 선택해");
-      $("#register").focus();
+
+    if ($('#use_state_code').val() === '9') {
+      alert('상태를 선택해주세요.');
+      $('#use_state_code').focus();
       return false;
     }
-    //debugger;
     return true;
+
   });
 </script>

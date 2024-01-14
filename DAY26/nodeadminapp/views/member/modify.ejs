@@ -1,35 +1,131 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>멤버 수정</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
-  <body>
-    <h1>멤버 정보 확인 및 수정/삭제</h1>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <form action="/member/modify/<%=member.member_id%>" method="post">
-      이메일: <input type="text" id="email" name="email" /><br />
-      비번:
-      <input type="text" id="member_password" name="member_password" /><br />
-      이름: <input type="text" id="name" name="name" /><br />
-      이미지주소:
-      <input type="text" id="profile_img_path" name="profile_img_path" /><br />
-      전화번호: <input type="text" id="telephone" name="telephone" /><br />
-      등록타입:
-      <input type="text" id="entry_type_code" name="entry_type_code" /><br />
-      상태코드:
-      <input type="text" id="use_state_code" name="use_state_code" /><br />
-      생일: <input type="text" id="birth_date" name="birth_date" /><br />
-      regMemberID:
-      <input type="text" id="reg_member_id" name="reg_member_id" /><br />
-      editMemberID:
-      <input type="text" id="edit_member_id" name="edit_member_id" /><br />
+  <title>INSPINIA | Main view</title>
 
-      <input type="submit" value="수정" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
 
-      <a href="/member">멤버 목록 이동</a>
+  <link href="/css/animate.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
 
-      <a href="/member/delete?member_id=<%=member.member_id%>">삭제</a>
-    </form>
-  </body>
-</html>
+  <!--추가 스타일-->
+</head>
+
+<!--우측 콘텐츠 헤더영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>관리자정보관리</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/main">홈</a>
+      </li>>
+      <li>
+        <a>관리자정보관리</a>
+      </li>>
+      <li class="active">
+        <strong>조회</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2"></div>
+</div>
+
+<!--우측 콘텐츠 영역 -->
+<form action="/member/modify/<%= user.member_id%>" method="post">
+  <div class="wrapper wrapper-content">
+    <div class="ibox-content m-b-sm border-bottom">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group d-flex flex-column">
+            <label class="control-label">프로필 사진</label>
+            <img class="w-75" src="<%= user.profile_img_path%>" alt="" />
+            <button class="w-75" submit="#">변경</button>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <div>
+              <label class="control-label">이메일</label>
+              <input
+                type="text" name="email"
+                class="form-control mb-3"
+                value="<%= user.email %>"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label col-6">이름</label>
+              <input
+                type="text" name="name" 
+                class="form-control mb-3"
+                value="<%= user.name %>"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">암호</label>
+              <input type="password" name="member_password" 
+              class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">전화번호</label>
+              <input
+                type="text" name="telephone" 
+                class="form-control"
+                value="<%= user.telephone%>"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">생년월일</label>
+              <input
+                type="text" name="birth_date" 
+                class="form-control"
+                value="<%= user.birth_date %>"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">상태</label>
+              <select name="use_state_code" class="form-control" >
+                <option value="9" <% if(user.use_state_code=="9"){%>selected<%}%>>선택</option>
+                <option value="0" <% if(user.use_state_code=="0"){%>selected<%}%>>미사용</option>
+                <option value="1" <% if(user.use_state_code=="1"){%>selected<%}%>>사용중</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="control-label">생성일시</label>
+              <input
+                type="date" name="reg_date" readonly
+                class="form-control"
+                value="<%= user.reg_date%>"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">수정일시</label>
+              <input
+                type="date" name="edit_date" name="edit_date" readonly
+                class="form-control"
+                value="<%= user.edit_date%>"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a href="/member/delete?id=<%=user.member_id%>" class="btn btn-danger">삭제</a>
+        <a href="/member/list" class="btn btn-info">목록</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  document.getElementById('edit_date').value=new Date().toISOString().slice(0, 10);
+  
+  //reg_date, edit_date yyyy-MM-dd 포맷 만들기(*해결중*)
+
+  //유효성검사
+
+</script>

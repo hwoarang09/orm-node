@@ -1,17 +1,39 @@
 const mongoose = require("mongoose");
 
-const connect = async function connectToMongoDB() {
-  try {
-    await mongoose.connect("mongodb://eddy:eddy524640!@localhost:27017/", {
-      dbName: "modu_chat",
-    });
-    console.log("Connected to MongoDB");
-    // Your code here
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+const connect = () => {
+  if (process.env.NODE_ENV !== "production") {
+    mongoose.set("debug", true);
   }
+
+  mongoose.connect(
+    "mongodb://eddy:eddy524640!@localhost:27017/",
+    {
+      dbName: "modu_chat",
+    },
+    (error) => {
+      if (error) {
+        console.log("몽고디비 연결 에러", error);
+      } else {
+        console.log("몽고디비 연결 성공");
+      }
+    }
+  );
 };
 
+mongoose.connection.on("error", (error) => {
+  console.error("몽고디비 연결 에러", error);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.error("몽고디비 연결이 끊겼습니다. 연결을 재시도합니다.");
+  connect();
+});
+
 require("./article.js");
+require("./member.js");
+require("./admin_member.js");
+require("./channelMember.js");
+require("./channelMessage.js");
+
 
 module.exports = connect;

@@ -1,115 +1,125 @@
-var express = require("express");
-var router = express.Router();
-var moment = require("moment");
+const express = require('express');
+const router = express.Router();
+const Admin = require('../schemas/admin_member');
 
-const Admin = require("../schemas/admin");
-/* GET home page. */
+router.get('/list', async (req, res) => {
+  try {
+    const admins = await Admin.find({});
+    res.render('admin/list', { admins });
+  } catch (error) {}
+});
 
-router.get("/list", async (req, res, next) => {
-  var searchOption = {
-    dept_name: "전체",
-    email: "",
-    name: "",
+router.post('/list', async (req, res) => {
+  const { admin_name, admin_id, used_yn_code } = req.body;
+
+  const searchOption = {
+    admin_name,
+    admin_id,
+    used_yn_code,
   };
-  const admin_members = await Admin.find({});
-  res.render("admin/list", { admin_members, searchOption, moment });
+
+  try {
+    const admins = await Admin.find({});
+    res.render('admin/list', { admins });
+  } catch (error) {}
 });
 
-router.post("/list", async (req, res) => {
-  var dept_name = req.body.dept_name;
-  var email = req.body.email;
-  var name = req.body.name;
-
-  var searchOption = {
-    dept_name,
-    email,
-    name,
-  };
-  const filteredObject = Object.keys(searchOption).reduce((acc, key) => {
-    if (searchOption[key] !== "") {
-      acc[key] = searchOption[key];
-    }
-    return acc;
-  }, {});
-
-  const admin_members = await Admin.find(filteredObject);
-
-  console.log("searchOption : ", searchOption);
-  console.log("filteredObject : ", filteredObject, { dept_name });
-  console.log("post list admin : ", admin_members);
-  res.render("admin/list", { admin_members, searchOption, moment });
-});
-router.get("/create", async (req, res, next) => {
-  res.render("admin/create");
+router.get('/create', async (req, res) => {
+  res.render('admin/create');
 });
 
-router.post("/create", async (req, res, next) => {
-  var company_code = req.body.company_code;
-  var admin_id = req.body.admin_id;
-  var admin_password = req.body.admin_password;
-  var admin_name = req.body.admin_name;
-  var email = req.body.email;
-  var telephone = req.body.telephone;
-  var dept_name = req.body.dept_name;
-
-  var reg_user_id = req.body.reg_user_id;
-  var edit_user_id = req.body.edit_user_id;
-
-  var admin = {
+router.post('/create', async (req, res) => {
+  const {
     company_code,
     admin_id,
     admin_password,
     admin_name,
     email,
     telephone,
-    dept_name,
-    used_yn_code: 1,
-    reg_user_id: 99,
-    edit_user_id: 99,
-    edit_date: Date.now(),
-    reg_date: Date.now(),
+    used_yn_code,
+    reg_member_id,
+    reg_date,
+  } = req.body;
+
+  const newAdmin = {
+    company_code,
+    admin_id,
+    admin_password,
+    admin_name,
+    email,
+    telephone,
+    used_yn_code,
+    reg_member_id,
+    reg_date,
   };
-  await Admin.create(admin);
-  console.log("admin : ", admin);
-  res.redirect("/admin/list");
+
+  try {
+    await Admin.create(newAdmin);
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.redirect('list');
 });
 
-router.get("/modify/:admin_member_id", async (req, res, next) => {
-  var admin_member_id = req.params.admin_member_id;
-  if (admin_member_id === undefined) res.send("error");
-  else {
-    const admin = await Admin.findOne({ admin_member_id });
+router.get('/modify/:id', async (req, res) => {
+  const selectedAdminMemberId = req.params.id;
 
-    res.render("admin/modify", { admin });
+  try {
+    const selectedAdmin = await Admin.findOne({
+      admin_member_id: selectedAdminMemberId,
+    });
+    res.render('admin/modify', { selectedAdmin });
+  } catch (error) {
+    console.log(error);
   }
 });
 
-router.post("/modify/:admin_member_id", async (req, res, next) => {
-  var admin_member_id = req.params.admin_member_id;
-  if (admin_member_id === undefined) res.send("error!");
-  else {
-    const admin = await Admin.findOne({ admin_member_id });
-    admin.company_code = req.body.company_code;
-    admin.admin_password = req.body.admin_password;
-    admin.admin_name = req.body.admin_name;
-    admin.email = req.body.email;
-    admin.telephone = req.body.telephone;
-    admin.dept_name = req.body.dept_name;
-    admin.used_yn_code = req.body.used_yn_code;
-    admin.reg_user_id = req.body.reg_user_id;
-    admin.edit_user_id = req.body.edit_user_id;
-    admin.edit_date = Date.now();
+router.post('/modify/:id', async (req, res) => {
+  const selectedAdminMemberId = req.params.id;
+  const {
+    company_code,
+    admin_id,
+    admin_password,
+    admin_name,
+    email,
+    telephone,
+    used_yn_code,
+    reg_member_id,
+    reg_date,
+    edit_user,
+    edit_date,
+    action,
+  } = req.body;
 
-    console.log("modify post admin : ", JSON.stringify(admin, null, 2));
-    await Admin.updateOne({ admin_member_id: admin_member_id }, admin);
-    res.redirect("/admin/list");
+  const updateAdmin = {
+    company_code,
+    admin_id,
+    admin_password,
+    admin_name,
+    email,
+    telephone,
+    used_yn_code,
+    reg_member_id,
+    reg_date,
+    edit_user,
+    edit_date,
+  };
+
+  try {
+    if (action === 'save') {
+      await Admin.updateOne(
+        { admin_member_id: selectedAdminMemberId },
+        updateAdmin
+      );
+    } else {
+      await Admin.deleteOne({ admin_member_id: selectedAdminMemberId });
+    }
+  } catch (error) {
+    console.log(error);
   }
-});
 
-router.get("/delete", async (req, res, next) => {
-  var admin_id = req.query.admin_id;
-  console.log("admin_id in delte ", admin_id);
-  res.redirect("/admin");
+  res.redirect('/admin/list');
 });
 
 module.exports = router;

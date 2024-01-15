@@ -148,7 +148,7 @@
               var loginUserToken = localStorage.getItem("userauthtoken");
               $.ajax({
                 url: "/chat/verify", // 서버에서 토큰을 검증하는 엔드포인트
-                type: "GET",
+                type: "POST",
                 headers: {
                   Authorization: `Bearer ${loginUserToken}`,
                 },

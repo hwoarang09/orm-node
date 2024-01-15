@@ -4,13 +4,10 @@ const path = require("path");
 const app = express();
 let db = require("../models/index");
 let Op = db.Sequelize.Op;
-
 const bcrypt = require("bcryptjs");
 const aes = require("mysql-aes");
-//각종 라이브러리
 var jwt = require("jsonwebtoken");
-//개인용 util
-const { mergeByKey } = require("./utils/utiles");
+const { mergeByKey, apiResultSetFunc } = require("./utils/utiles");
 const { tokenAuthChecking } = require("./apiMiddleware");
 //login api
 //에러처리
@@ -26,51 +23,60 @@ const { tokenAuthChecking } = require("./apiMiddleware");
 //   "message": "Password Wrong"
 // }
 router.post("/login", async (req, res, next) => {
+  let apiResult = apiResultSetFunc(200, "기본data", "기본resutl");
+
   try {
-    let { email, password } = req.body;
-    console.log(email, password);
+    let { email, member_password } = req.body;
+    console.log(email, member_password);
     email = aes.encrypt(email, process.env.MYSQL_AES_KEY);
     const member = await db.Member.findOne({
       where: {
         email,
       },
     });
-    console.log("member :", member);
+
     if (!member)
-      return res
-        .status(400)
-        .json({ code: 400, success: false, msg: "NotExistEmail" });
+      apiResult = apiResultSetFunc(
+        400,
+        "NotExistEmail",
+        "해당 이메일의 유저가 존재하지 않습니다."
+      );
+    else {
+      let passwordResult = await bcrypt.compare(
+        member_password,
+        member.member_password
+      );
+      if (!passwordResult)
+        apiResult = apiResultSetFunc(
+          400,
+          "NotCorrectword",
+          "비밀번호가 틀렸습니다."
+        );
+      else {
+        var memberTokenData = {
+          member_id: member.member_id,
+          email: member.email,
+          name: member.name,
+          profile_img_path: member.profile_img_path,
+          telephone: member.telephone,
+        };
 
-    let passwordResult = await bcrypt.compare(password, member.member_password);
-    var memberTokenData = {
-      member_id: member.member_id,
-      email: member.email,
-      name: member.name,
-      profile_img_path: member.profile_img_path,
-      telephone: member.telephone,
-    };
-
-    var token = await jwt.sign(memberTokenData, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-      issuer: "msoftware",
-    });
-    console.log("token : ", token);
-    if (!passwordResult) {
-      return res
-        .status(400)
-        .json({ code: 400, success: false, msg: "NotCorrectword", token });
-    } else
-      return res
-        .status(200)
-        .json({ code: 200, success: true, msg: "Login success", token });
+        var token = await jwt.sign(memberTokenData, process.env.JWT_SECRET, {
+          expiresIn: "24h",
+          issuer: "msoftware",
+        });
+        apiResult = apiResultSetFunc(200, token, "로그인에 성공했습니다.");
+      }
+    }
   } catch (err) {
     console.error("Error in member POST /login:", err);
-    res.status(500).send("Internal Server Error");
+    apiResult = apiResultSetFunc(500, null, "failed or server error!");
   }
+
+  res.json(apiResult);
 });
 
 //entry api
-
 router.post("/entry", async (req, res, next) => {
   try {
     let member = {
@@ -90,7 +96,6 @@ router.post("/entry", async (req, res, next) => {
     member.member_password = await bcrypt.hash(member.member_password, 12);
     member.email = aes.encrypt(member.email, process.env.MYSQL_AES_KEY);
     member.telephone = aes.encrypt(member.telephone, process.env.MYSQL_AES_KEY);
-    console.log("member : ", member);
     member = await db.Member.findOne({
       where: {
         email,
@@ -319,7 +324,7 @@ router.get("/:mid", async (req, res, next) => {
         member_id,
       },
     });
-    console.log(`member_id : ${member_id}  member : ${member}`);
+    //console.log(`member_id : ${member_id}  member : ${member}`);
     if (!member) {
       // 멤버를 찾지 못한 경우
       return res.status(404).send("db.Member.not found");

@@ -1,11 +1,6 @@
-<style>
-  body.swal2-height-auto {
-    height: 0 !important;
-  }
-</style>
 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
   <div class="login-wrapper">
-    <form action="/" method="post" id="form">
+    <form id="loginForm" name="loginForm">
       <div class="login-screen">
         <div class="login-body">
           <a href="/" class="login-logo">
@@ -18,7 +13,11 @@
             <div class="field-placeholder">Email ID</div>
           </div>
           <div class="field-wrapper mb-3">
-            <input type="password" name="member_password" id="password" />
+            <input
+              type="password"
+              name="member_password"
+              id="member_password"
+            />
             <div class="field-placeholder">Password</div>
           </div>
 
@@ -39,20 +38,22 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- jQuery 라이브러리를 CDN으로 불러오기 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-  const form = document.getElementById("form");
+  const form = document.getElementById("loginForm");
 
   const handleSubmit = async (e) => {
     const email = document.getElementById("email");
-    const password = document.getElementById("password");
+    const password = document.getElementById("member_password");
 
     if (email.value === "") {
       e.preventDefault();
       await Swal.fire({
         icon: "error",
         title: "로그인 실패",
-        text: "이메일을 입력해주세요",
+        text: "이메일을 입력해주세요!",
         customClass: {
           heightAuto: 0, // 향후 업데이트에서도 적용되도록 설정
         },
@@ -69,6 +70,71 @@
       });
       return false;
     }
+
+    console.log("1111");
+    //AJAX로 백엔드 RESTful 로그인 라우팅메소드를 호출
+    var loginData = {
+      email: $("#email").val(),
+      member_password: $("#member_password").val(),
+    };
+
+    console.log("loginData : ", loginData);
+    $.ajax({
+      url: "/api/member/login",
+      type: "POST",
+      data: loginData,
+      success: async (result) => {
+        console.log("로그인 결과값 확인 : ", result);
+        if (result.code == "200") {
+          localStorage.setItem("modutoken", result.data);
+          var loginUserToken = localStorage.getItem("modutoken");
+          $.ajax({
+            url: "/chat/verify", // 서버에서 토큰을 검증하는 엔드포인트
+            type: "GET",
+            headers: {
+              Authorization: `Bearer ${loginUserToken}`,
+            },
+            success: function (verificationResult) {
+              if (verificationResult.code == "200") {
+                //근데 그냥 /chat 접속해도 들어가짐.
+                //이런 거 알려주는 강의 따로 공부해봐야겠다.
+                location.href = "/chat";
+              }
+            },
+            error: function (error) {
+              console.error("Token verification request failed", error);
+            },
+          });
+        } else {
+          if (result.code == "400" && result.data == "NotExistEmail") {
+            await Swal.fire({
+              icon: "error",
+              title: "로그인 실패",
+              text: "해당 이메일이 존재하지 않습니다.!",
+              didClose: () => {
+                email.focus();
+              },
+            });
+            email.value = "";
+            member_password.value = "";
+          } else if (result.code == "400" && result.data == "NotCorrectword") {
+            await Swal.fire({
+              icon: "error",
+              title: "로그인 실패",
+              text: "비밀 번호가 틀렸습니다.!",
+              didClose: () => {
+                member_password.focus();
+              },
+            });
+            member_password.value = "";
+          }
+        }
+      },
+      error: function (error) {
+        console.log("AJAX 호출 오류: ", error);
+      },
+    });
+    e.preventDefault();
   };
 
   form.addEventListener("submit", handleSubmit);

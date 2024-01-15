@@ -9,6 +9,7 @@ exports.tokenAuthChecking = async (req, res, next) => {
 
   try {
     var token = req.headers.authorization.split("Bearer ")[1];
+
     var tokenJsonData = await jwt.verify(token, process.env.JWT_SECRET);
 
     if (tokenJsonData != null) next();

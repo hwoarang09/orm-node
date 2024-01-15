@@ -23,6 +23,14 @@ const mergeByKey = async (
   }, baseObj);
 };
 
+const apiResultSetFunc = function (code, data, result) {
+  let apiResult = {};
+  apiResult.code = code;
+  apiResult.data = data;
+  apiResult.result = result;
+
+  return apiResult;
+};
 //channel_id : 채널이름
 //매칭 오브젝트
 var channel_id_value_obj = {
@@ -42,4 +50,9 @@ var msg_type_code_value_obj = {
   3: "일반메세지",
   4: "파일메세지",
 };
-module.exports = { mergeByKey, channel_id_value_obj, msg_type_code_value_obj };
+module.exports = {
+  mergeByKey,
+  apiResultSetFunc,
+  channel_id_value_obj,
+  msg_type_code_value_obj,
+};

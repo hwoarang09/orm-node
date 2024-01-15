@@ -7,6 +7,7 @@ const aes = require("mysql-aes");
 const jwt = require("jsonwebtoken");
 const { json } = require("sequelize");
 const member = require("../models/member");
+
 /* GET home page. */
 
 router.get("/", async (req, res, next) => {
@@ -20,7 +21,7 @@ router.post("/", async (req, res) => {
     email = aes.encrypt(email, process.env.MYSQL_AES_KEY);
 
     const getMember = await db.Member.findOne({ where: { email } });
-    console.log("getMember :", getMember);
+    //console.log("getMember :", getMember);
     if (!getMember) res.redirect("/");
     let passwordResult = await bcrypt.compare(
       member_password,
@@ -41,25 +42,36 @@ router.get("/entry", async (req, res, next) => {
 });
 
 router.post("/entry", async (req, res) => {
-  const { email, member_password, name, profile_img_path, telephone } =
-    req.body;
-  member_password = await bcrypt.hash(member_password, 12);
-  email = await aes.encrypt(email, process.env.MYSQL_AES_KEY);
-  telephone = await aes.encrypt(telephone, process.env.MYSQL_AES_KEY);
-  const newMember = {
+  let {
     email,
     member_password,
     name,
     profile_img_path,
     telephone,
-    entry_type_code: 1,
+    birth_date,
+    entry_type_code,
+  } = req.body;
+
+  member_password = await bcrypt.hash(member_password, 12);
+  email = await aes.encrypt(email, process.env.MYSQL_AES_KEY);
+  telephone = await aes.encrypt(telephone, process.env.MYSQL_AES_KEY);
+
+  let newMember = {
+    email,
+    member_password,
+    name,
+    profile_img_path: "/img/1.jpg",
+    telephone,
+    entry_type_code,
     use_state_code: 1,
     reg_member_id: 1,
     reg_date: Date.now(),
+    birth_date,
   };
 
   try {
-    await db.Member.create(newMember);
+    let result = await db.Member.create(newMember);
+    console.log("result : ", result);
     res.redirect("/");
   } catch (error) {
     console.log(error);

@@ -78,6 +78,8 @@ router.post("/login", async (req, res, next) => {
 
 //entry api
 router.post("/entry", async (req, res, next) => {
+  let apiResult = apiResultSetFunc(200, "기본data", "기본resutl");
+
   try {
     let member = {
       email: req.body.email,
@@ -86,35 +88,41 @@ router.post("/entry", async (req, res, next) => {
       profile_img_path: req.body.profile_img_path,
       telephone: req.body.telephone,
       entry_type_code: req.body.entry_type_code,
-      use_state_code: req.body.use_state_code,
+      use_state_code: 1,
       birth_date: req.body.birth_date,
       reg_date: Date.now(),
-      reg_member_id: req.body.reg_member_id,
+      reg_member_id: 1,
       edit_date: Date.now(),
-      edit_member_id: req.body.edit_member_id,
+      edit_member_id: 1,
     };
+
     member.member_password = await bcrypt.hash(member.member_password, 12);
     member.email = aes.encrypt(member.email, process.env.MYSQL_AES_KEY);
     member.telephone = aes.encrypt(member.telephone, process.env.MYSQL_AES_KEY);
-    member = await db.Member.findOne({
+    search_member = await db.Member.findOne({
       where: {
-        email,
+        email: member.email,
       },
     });
 
-    if (member) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Already db.Member.exists" });
-    } else {
-      let result = await db.Member.create(member);
-      console.log("create result : ", result);
-      return res.status(200).json({ success: true, message: "Create Success" });
+    if (search_member)
+      apiResult = apiResultSetFunc(
+        400,
+        "AlreadyExistEmail",
+        "해당 이메일의 유저가 이미 존재합니다."
+      );
+    else {
+      let create_result = await db.Member.create(member);
+      apiResult = apiResultSetFunc(
+        200,
+        create_result,
+        "회원가입에 성공하셨습니다."
+      );
     }
   } catch (err) {
-    console.error("Error in member POST /entry:", err);
-    res.status(500).send("Internal Server Error");
+    apiResult = apiResultSetFunc(500, null, "failed or server error! in entry");
   }
+  res.json(apiResult);
 });
 
 //find api

@@ -4,7 +4,7 @@ exports.tokenAuthChecking = async (req, res, next) => {
   var apiResult = {
     code: 400,
     data: null,
-    msg: "!!.",
+    resultMsg: "!!.",
   };
 
   try {
@@ -18,7 +18,7 @@ exports.tokenAuthChecking = async (req, res, next) => {
       apiResult = {
         code: 400,
         data: null,
-        msg: "유효하지 않은 사용자 인증토큰.",
+        resultMsg: "유효하지 않은 사용자 인증토큰.",
       };
       return res.json(apiResult);
     }

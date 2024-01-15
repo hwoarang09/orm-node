@@ -23,11 +23,11 @@ const mergeByKey = async (
   }, baseObj);
 };
 
-const apiResultSetFunc = function (code, data, result) {
+const apiResultSetFunc = function (code, data, resultMsg) {
   let apiResult = {};
   apiResult.code = code;
   apiResult.data = data;
-  apiResult.result = result;
+  apiResult.resultMsg = resultMsg;
 
   return apiResult;
 };

@@ -8,7 +8,6 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/verify", tokenAuthChecking, async (req, res, next) => {
-  console.log("apiResult locals: ", res.locals.apiResult);
   res.json({ code: "200", message: "Chat started" });
 });
 module.exports = router;

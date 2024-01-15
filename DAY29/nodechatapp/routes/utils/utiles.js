@@ -18,9 +18,9 @@ const mergeByKey = async (
       result[key] = await bcrypt.hash(otherObj[key], 12);
     else if (aes_keys.includes(key))
       result[key] = aes.encrypt(otherObj[key], process.env.MYSQL_AES_KEY);
-    else result[key] = otherObj[key];
+    else if (otherObj[key]) result[key] = otherObj[key];
     return result;
-  }, baseObj);
+  }, Promise.resolve(baseObj));
 };
 
 const apiResultSetFunc = function (code, data, resultMsg) {

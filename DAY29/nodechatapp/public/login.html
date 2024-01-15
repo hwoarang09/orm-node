@@ -63,11 +63,15 @@
                   </a>
                   <h6>Welcome back,<br />Please login to your account.</h6>
                   <div class="field-wrapper">
-                    <input type="email" id="email" autofocus />
+                    <input type="email" id="email" name="email" autofocus />
                     <div class="field-placeholder">Email ID</div>
                   </div>
                   <div class="field-wrapper mb-3">
-                    <input type="password" id="password" />
+                    <input
+                      type="password"
+                      id="member_password"
+                      name="member_password"
+                    />
                     <div class="field-placeholder">Password</div>
                   </div>
                   <div class="actions">
@@ -91,56 +95,118 @@
       <!-- Row end -->
     </div>
 
-    <script src="js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jQuery 라이브러리를 CDN으로 불러오기 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-      $("#loginForm").submit(function () {
-        if ($("#email").val() == "") {
-          alert("메일주소를 입력해주세요.");
-          $("#email").focus();
+      const form = document.getElementById("loginForm");
+
+      const handleSubmit = async (e) => {
+        const email = document.getElementById("email");
+        const password = document.getElementById("member_password");
+
+        if (email.value === "") {
+          e.preventDefault();
+          await Swal.fire({
+            icon: "error",
+            title: "로그인 실패",
+            text: "이메일을 입력해주세요!",
+            customClass: {
+              heightAuto: 0, // 향후 업데이트에서도 적용되도록 설정
+            },
+          });
           return false;
         }
 
-        var member = {
+        if (password.value === "") {
+          e.preventDefault();
+          await Swal.fire({
+            icon: "error",
+            title: "로그인 실패",
+            text: "비밀번호를 입력해주세요",
+          });
+          return false;
+        }
+
+        console.log("1111");
+        //AJAX로 백엔드 RESTful 로그인 라우팅메소드를 호출
+        var loginData = {
           email: $("#email").val(),
-          password: $("#password").val(),
+          member_password: $("#member_password").val(),
         };
 
-        //백엔드의 로그인 RESTFul API를 호출해 로그인 처리합니다.
+        console.log("loginData : ", loginData);
         $.ajax({
           url: "/api/member/login",
           type: "POST",
-          data: member,
-          success: function (result) {
-            console.log("회원로그인 결과값 확인:", result);
-            alert("hi");
-            if (result.code == 200) {
-              //백엔드에서 전달된 jwt토큰값을 웹브라우저 환경에 저장한다.
-              //저장방식은 cookie(x)보다 storage(local, session)객체를 사용합니다
-              //웹브라우저에 탑재된 html5의 strage객체는 웹브라웢에
-              //쿠키를 대신해 데이ㅓㅌ를 저장할 수 있는 클라이언트 html객체임.
-
-              //localStorage.setItem('키값', 'jwt토큰값')
-              localStorage.setItem("userauthtoken", result.token);
-              location.href = "/main.html";
-            } else if (result.code == 400) {
-              if (result.msg == "NotExistEmail") {
-                alert("동일한 메일주소가 존재하지 않습니다.");
-                return false;
-              }
-
-              if (result.msg == "NotCorrectword") {
-                alert("암호가 존재하지 않습니다.");
-                return false;
-              }
+          data: loginData,
+          success: async (result) => {
+            console.log("로그인 결과값 확인 : ", result);
+            if (result.code == "200") {
+              localStorage.setItem("userauthtoken", result.data);
+              var loginUserToken = localStorage.getItem("userauthtoken");
+              $.ajax({
+                url: "/chat/verify", // 서버에서 토큰을 검증하는 엔드포인트
+                type: "GET",
+                headers: {
+                  Authorization: `Bearer ${loginUserToken}`,
+                },
+                success: function (verificationResult) {
+                  if (verificationResult.code == "200") {
+                    //근데 그냥 /chat 접속해도 들어가짐.
+                    //이런 거 알려주는 강의 따로 공부해봐야겠다.
+                    Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: "로그인에 성공했습니다.",
+                      showConfirmButton: false,
+                      didClose: () => {
+                        location.href = "/main.html";
+                      },
+                    });
+                  }
+                },
+                error: function (error) {
+                  console.error("Token verification request failed", error);
+                },
+              });
             } else {
-              alert("로그인을 실패헀습니다.");
+              if (result.code == "400" && result.data == "NotExistEmail") {
+                await Swal.fire({
+                  icon: "error",
+                  title: "로그인 실패",
+                  text: "해당 이메일이 존재하지 않습니다.!",
+                  didClose: () => {
+                    email.focus();
+                  },
+                });
+                email.value = "";
+                member_password.value = "";
+              } else if (
+                result.code == "400" &&
+                result.data == "NotCorrectword"
+              ) {
+                await Swal.fire({
+                  icon: "error",
+                  title: "로그인 실패",
+                  text: "비밀 번호가 틀렸습니다.!",
+                  didClose: () => {
+                    member_password.focus();
+                  },
+                });
+                member_password.value = "";
+              }
             }
           },
+          error: function (error) {
+            console.log("AJAX 호출 오류: ", error);
+          },
         });
+        e.preventDefault();
+      };
 
-        return false;
-      });
+      form.addEventListener("submit", handleSubmit);
     </script>
   </body>
   <style>

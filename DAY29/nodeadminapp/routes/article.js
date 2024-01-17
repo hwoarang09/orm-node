@@ -25,6 +25,13 @@ var simpleupload = multer({ storage: storage });
 //ORM db객체를 참조
 var db = require("../models/index");
 
+var { isLoggedIn, isNotLoggedIn } = require("./sessionMiddleware");
+
+// router.use(isLoggedIn, async (req, res) => {
+//   console.log("admin 로그인확인 미들웨어!!");
+//   next();
+// });
+
 /*게시글 목록 정보 조회 웹페이지 요청 라우팅 메소드*/
 //일반 파일 업로드 페이지 요청
 router.get("/upload", async (req, res, next) => {

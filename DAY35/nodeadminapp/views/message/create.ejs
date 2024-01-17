@@ -1,0 +1,209 @@
+<head>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="/css/animate.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!--추가 스타일-->
+</head>
+
+<!--우측 콘텐츠 헤더영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>신규 메세지 등록</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">Home-></a>
+      </li>
+      <li>
+        <a>신규 메세지 작성-></a>
+      </li>
+      <li class="active">
+        <strong>등록</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2"></div>
+</div>
+
+<!--우측 콘텐츠 영역 -->
+<form action="/message/create" id="messageForm" method="post">
+  <div class="wrapper wrapper-content">
+    <div class="ibox-content m-b-sm border-bottom">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">채널번호</label>
+            <select name="channel_id" id="channel_id" class="form-control">
+              <option value="1">1번채널</option>
+              <option value="2">2번채널</option>
+              <option value="3">3번채널</option>
+              <option value="4">4번채널</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">멤버id</label>
+            <input
+              type="text"
+              name="member_id"
+              id="member_id"
+              class="form-control"
+              placeholder="ex)1234 등의 숫자"
+            />
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">메세지 유형</label>
+            <select
+              name="msg_type_code"
+              id="msg_type_code"
+              class="form-control"
+            >
+              <option value="0">퇴장</option>
+              <option value="1">입장</option>
+              <option value="3">일반메세지</option>
+              <option value="4">파일메세지</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">채팅닉네임</label>
+            <input
+              type="text"
+              name="nick_name"
+              id="nick_name"
+              placeholder="100글자미만"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">connection_id</label>
+            <input
+              type="text"
+              name="connection_id"
+              id="connection_id"
+              class="form-control"
+              placeholder="ex)1234등의 숫자"
+            />
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">ip주소</label>
+            <input
+              type="text"
+              name="ip_address"
+              id="ip_address"
+              class="form-control"
+              placeholder="ex)127.0.0.1"
+            />
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="control-label">최상위채널메세지id</label>
+            <input
+              type="text"
+              name="top_channel_msg_id"
+              id="top_channel_msg_id"
+              class="form-control"
+              placeholder="ex)1234등의 숫자"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="control-label">메세지</label>
+            <textarea
+              class="form-control"
+              id="message"
+              name="message"
+              rows="10"
+              cols="5"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label">메세지 상태</label>
+            <select
+              name="msg_state_code"
+              id="msg_state_code"
+              class="form-control"
+            >
+              <option value="0">숨김</option>
+              <option value="1">공개</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a href="/message/list" class="btn btn-info">목록</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  //html페이지가 브라우저에서 렌더링이 다 됐으면 발생하는 이벤트
+  $(document).ready(function () {
+    $("#boardTypeCode").focus();
+    console.log("렌더링완료. create");
+  });
+
+  //articleForm에서 submit이 발생하면 function실행.
+  $("#messageForm").submit(function () {
+    //debugger;
+
+    if ($("#member_id").val() === "" || !$.isNumeric($("#member_id").val())) {
+      alert("member id에 숫자를 입력하시오");
+      $("#member_id").focus();
+      return false;
+    }
+    if ($("#nick_name").val() === "") {
+      alert("닉네임 입력하시오");
+      $("#nick_name").focus();
+      return false;
+    }
+    if (
+      $("#connection_id").val() === "" ||
+      !$.isNumeric($("#connection_id").val())
+    ) {
+      alert("접속id에 숫자를 입력하시오");
+      $("#connection_id").focus();
+      return false;
+    }
+    if ($("#ip_address").val() === "") {
+      alert("ip주소 입력해.");
+      $("#ip_address").focus();
+      return false;
+    }
+    if (
+      $("#top_channel_msg_id").val() === "" ||
+      !$.isNumeric($("#top_channel_msg_id").val())
+    ) {
+      alert("최상위 채널msg id에 숫자를 입력하시오");
+      $("#top_channel_msg_id").focus();
+      return false;
+    }
+    //debugger;
+    return true;
+  });
+</script>

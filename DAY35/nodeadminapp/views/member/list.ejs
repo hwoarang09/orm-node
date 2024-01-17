@@ -1,0 +1,123 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>INSPINIA | Main view</title>
+
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="/css/animate.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!--추가 스타일-->
+</head>
+
+<!--우측 상단 헤더 영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>사용자 정보 관리</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/main">홈 ></a>
+      </li>
+      <li>
+        <a>사용자 정보 관리 ></a>
+      </li>
+      <li class="active">
+        <strong>조회</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2"></div>
+</div>
+
+<!--우측 콘텐츠 영역 -->
+<form action="">
+
+</form>
+<div class="wrapper wrapper-content">
+
+  <!-- 사용자정보 옵션 및 조회 영역 -->
+  <form action="/member/list" method="post">
+    <div class="ibox-content m-b-sm border-bottom">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label" for="OrderNo">메일주소</label>
+            <input type="email" name="email" class="form-control" value="<%=searchOption.email%>"/>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label" for="OrderName">이름</label>
+            <input type="text" name="name" class="form-control" value="<%=searchOption.name%>"/>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label" for="MobileNo">가입상태</label>
+            <select name="use_state_code" class="form-control" value="<%=searchOption.use_state_code%>">
+              <option value="0"<% if(searchOption.use_state_code == "0"){ %> selected <% } %>>전체</option>
+              <option value="1"<% if(searchOption.use_state_code == "1"){ %> selected <% } %>>가입</option>
+              <option value="2"<% if(searchOption.use_state_code == "2"){ %> selected <% } %>>탈퇴</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">조회</button>
+        <a href="/member/create" class="btn btn-info">신규</a>
+      </div>
+    </div>
+  </form>
+
+
+  <!-- 사용자정보 조회 결과 목록 표시 영역 -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th width="10%">순번</th>
+                  <th width="15%">이메일</th>
+                  <th width="15%">이름</th>
+                  <th width="15%">전화번호</th>
+                  <th width="10%">생년월일</th>
+                  <th width="15%">가입상태</th>
+                  <th width="10%">등록일시</th>
+                  <th width="10%">수정일시</th>
+                </tr>
+              </thead>
+              <tbody class="hoverTblBody">
+                <% for (let i = 0; i < member_list.length; i ++) {%>
+                <tr>
+                  <td><%= member_list[i].member_id %></td>
+                  <td>
+                    <a href="/member/modify/<%= member_list[i].member_id %>"><%= member_list[i].email %></a>
+                  </td>
+                  <td>
+                    <a href="/member/modify/<%= member_list[i].member_id %>"><%= member_list[i].name %></a>
+                  </td>
+                  <td><%= member_list[i].telephone %></td>
+                  <td><%= member_list[i].birth_date %></td>
+                  <% if(member_list[i].use_state_code == "1"){%>
+                  <td>가입</td>
+                  <% } else{ %>
+                  <td>탈퇴</td>
+                  <% }%>
+                  <td><%= member_list[i].reg_date %></td>
+                  <td><%= member_list[i].edit_date %></td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

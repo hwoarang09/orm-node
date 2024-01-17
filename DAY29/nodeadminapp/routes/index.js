@@ -3,12 +3,17 @@ const router = express.Router();
 const db = require("../models/index");
 const bcrypt = require("bcryptjs");
 var session = require("express-session");
+var { isLoggedIn, isNotLoggedIn } = require("./sessionMiddleware");
 /*
 -관리자 웹사이트의 로그인 웹페이지를 제공하는 라우팅 메소드
 -사용자 계정정보가 아닌 관리자 계정정보를 통한 로그인을 시도합니다
 -http://localhost:3001
 */
+
+//isLoggedIn,
 router.get("/", async (req, res) => res.render("login", { layout: false }));
+
+//isNotLoggedIn,
 router.get("/login", async (req, res) => {
   //세션으로 로그인한 사용자 정보 추출
   var sessionData = req.session;

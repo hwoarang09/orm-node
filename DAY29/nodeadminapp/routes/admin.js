@@ -3,6 +3,13 @@ const router = express.Router();
 const db = require("../models/index");
 const bcrypt = require("bcryptjs");
 const aes = require("mysql-aes");
+var { isLoggedIn, isNotLoggedIn } = require("./sessionMiddleware");
+
+// router.use(isLoggedIn, async (req, res) => {
+//   console.log("admin 로그인확인 미들웨어!!");
+//   next();
+// });
+
 router.get("/list", async (req, res) => {
   let admins = await db.Admin.findAll({
     attributes: [

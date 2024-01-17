@@ -1,0 +1,93 @@
+<head>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="/css/animate.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!--추가 스타일-->
+</head>
+
+<!--우측 콘텐츠 헤더영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>사용자 정보 수정</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/main">홈 ></a>
+      </li>
+      <li>
+        <a>사용자정보수정 ></a>
+      </li>
+      <li class="active">
+        <strong>확인/수정</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2"></div>
+</div>
+
+<!--우측 콘텐츠 영역 -->
+<form action="/member/modify/<%=member.member_id%>" method="post">
+  <div class="wrapper wrapper-content">
+    <div class="ibox-content m-b-sm border-bottom">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group d-flex flex-column">
+            <label class="control-label">프로필 사진</label>
+            <img class="w-75" src="" alt="" />
+            <button class="w-75" submit="#" name="profile_img_path" value="<%=member.profile_img_path%>">변경</button>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <div>
+              <label class="control-label">이메일</label>
+              <input type="email" name="email" class="form-control mb-3" value="<%=member.email%>"/>
+            </div>
+            <div class="form-group">
+              <label class="control-label">이름</label>
+              <input type="text" name="name" class="form-control mb-3" value="<%=member.name%>"/>
+            </div>
+            <div class="form-group">
+              <label class="control-label">비밀번호</label>
+              <input type="password" name="member_password" class="form-control mb-3" value="<%=member.member_password%>"/>
+            </div>
+            <div class="form-group">
+              <label class="control-label">생년월일</label>
+              <input type="text" name="birth_date" class="form-control" value="<%=member.birth_date%>"/>
+            </div>
+            <div class="form-group">
+              <label class="control-label">전화번호</label>
+              <input type="text" name="telephone" class="form-control" value="<%=member.telephone%>"/>
+            </div>
+            <div class="form-group">
+              <label class="control-label">가입유형</label>
+              <select name="entry_type_code" class="form-control" >
+                <option value="0"<% if(member.entry_type_code == "0"){%>selected<%} %>>선택</option>
+                <option value="1"<% if(member.entry_type_code == "1"){%>selected<%} %>>인스타</option>
+                <option value="2"<% if(member.entry_type_code == "2"){%>selected<%} %>>유튜브</option>
+                <option value="3"<% if(member.entry_type_code == "3"){%>selected<%} %>>블로그</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="control-label">등록일시</label>
+              <input type="text" name="reg_date" class="form-control" value="2023-12-20" readonly/>
+            </div>
+            <div class="form-group">
+              <label class="control-label">수정일시</label>
+              <input type="text" name="reg_date" class="form-control" value="<%=member.reg_date%>"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a href="/member/delete?member_id=<%=member.member_id%>" class="btn btn-danger" id="btnDelete">삭제</a>
+        <a href="/member/list" class="btn btn-info">목록</a>
+      </div>
+    </div>
+  </div>
+</form>

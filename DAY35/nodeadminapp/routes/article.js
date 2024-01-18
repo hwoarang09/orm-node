@@ -4,9 +4,6 @@ var router = express.Router();
 var moment = require("moment");
 var multer = require("multer");
 
-//var { isLoggedIn, isNotLoggedIn } = require("./sessionMiddleware");
-var { isLoggedIn, isNotLoggedIn } = require("./passportMiddleware");
-
 //s3전용 업로드 객체 참조
 
 var { upload } = require("../common/aws_s3");

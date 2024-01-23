@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+  <head>
+    <title>전체 회원 목록</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>커뮤니티 고유번호</th>
+            <th>채널 분류 코드</th>
+            <th>채널명</th>
+            <th>채널 간략 소개</th>
+            <th>동시 채널 접속자 수</th>
+            <th>대표이미지 주소</th>
+            <th>채널 오픈 상태 코드</th>
+            <th>등록일시</th>
+            <th>등록아이디</th>
+            <th>수정일시</th>
+            <th>수정아이디</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% for(var i=0;i < channelList.length;i++) { %>
+          <tr>
+            <td><%=channelList[i].community_id%></td>
+            <td><%=channelList[i].category_code%></td>
+            <td><%=channelList[i].channel_name%></td>
+            <td><%=channelList[i].channel_desc%></td>
+            <td><%=channelList[i].user_limit%></td>
+            <td><%=channelList[i].channel_img_path%></td>
+            <td><%=channelList[i].channel_state_code%></td>
+            <td><%=channelList[i].reg_date%></td>
+            <td><%=channelList[i].reg_member_id%></td>
+            <td><%=channelList[i].edit_date%></td>
+            <td><%=channelList[i].edit_member_id%></td>
+            <td>
+              <a href="modify">수정</a>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

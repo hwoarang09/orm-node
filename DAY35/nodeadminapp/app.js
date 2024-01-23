@@ -4,7 +4,15 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var session = require("express-session");
+const redis = require("redis");
 
+let RedisStore = require("connect-redis")(session);
+
+let redisClient = redis.createClient({
+  host: "127.0.0.1",
+  port: 6379,
+  db: 0,
+});
 var flash = require("connect-flash");
 //환경설정팡리 호출하기: 전역정보로 설정됨
 require("dotenv").config();
@@ -45,16 +53,32 @@ app.set("layout extractScripts", true); //컨텐츠 페이지 내 script 태그�
 app.set("layout extractStyles", true); //style
 app.set("layout extractMetas", true); //meta -> 난 메타는 연습 안따라감;;나중에 다시 설명해주신다 다 함.
 
+// app.use(
+//   session({
+//     resave: false,
+//     saveUninitialized: true,
+//     secret: "testsecret",
+//     cookie: {
+//       httpOnly: true,
+//       secure: false,
+//       maxAge: 1000 * 60 * 5, //5분동안 서버세션을 유지하겠다.(1000은 1초)
+//     },
+//   })
+// );
+
 app.use(
   session({
-    resave: false,
+    store: new RedisStore({ client: redisClient }),
     saveUninitialized: true,
-    secret: "testsecret",
+    secret: "moiin",
+    resave: false,
     cookie: {
       httpOnly: true,
       secure: false,
-      maxAge: 1000 * 60 * 5, //5분동안 서버세션을 유지하겠다.(1000은 1초)
+      //maxAge: 3600000, //세션유지 시간설정 : 1시간
     },
+    ttl: 250, //Redis DB에서 세션정보가 사라지게 할지에 대한 만료시간설정
+    token: "moiin",
   })
 );
 

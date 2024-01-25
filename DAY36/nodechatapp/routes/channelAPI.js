@@ -4,6 +4,7 @@ const router = express.Router();
 var db = require("../models/index");
 const Channel = require("../models/channel");
 var Op = db.Sequelize.Op;
+const { tokenAuthChecking } = require("./apiMiddleware");
 //각종 라이브러리
 const channelList = [
   {
@@ -68,6 +69,7 @@ router.get("/all", async (req, res, next) => {
 });
 
 router.post("/create", async (req, res, next) => {
+  console.log("body :", req.body);
   try {
     const {
       community_id,

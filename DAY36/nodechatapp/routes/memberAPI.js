@@ -511,6 +511,42 @@ router.get("/allUser", async (req, res) => {
   res.json(apiResult);
 });
 
+//find api
+router.post("/add", async (req, res, next) => {
+  const email = req.body.email;
+  var apiResult = {};
+
+  apiResult.code = 500;
+  apiResult.data = null;
+  apiResult.result = "failed";
+
+  try {
+    var email_en = await aes.encrypt(email, process.env.MYSQL_AES_KEY);
+    var member = await db.Member.findOne({
+      where: { email: email_en },
+      attributes: ["member_id", "email", "name", "profile_img_path"],
+    });
+    if (!member) {
+      console.error("member not found");
+      apiResult.code = 500;
+      apiResult.data = null;
+      apiResult.result = "no member";
+    } else {
+      var resultData = member.toJSON();
+      resultData.email = email;
+      apiResult.code = 200;
+      apiResult.data = resultData;
+      apiResult.result = "find!";
+    }
+  } catch (err) {
+    console.error("Error in member POST /add:", err);
+    apiResult.code = 500;
+    apiResult.data = null;
+    apiResult.result = "failed";
+  }
+  res.json(apiResult);
+});
+
 router.get("/:mid", async (req, res, next) => {
   try {
     let member_id = req.params.mid;

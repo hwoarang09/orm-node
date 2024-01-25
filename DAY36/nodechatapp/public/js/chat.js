@@ -1,5 +1,10 @@
-const constants = require("../common/enum");
-
+//const constants = require("../common/enum");
+console.log("111");
+//const aes = require("mysql-aes");
+//import * as aes from "mysql-aes";
+console.log("112");
+var addGroupList = [];
+var createGroupObject = {};
 $("#btnSend").click(function () {
   var channelId = currentChannel.channel_id;
   var memberId = currentUser.member_id;
@@ -16,6 +21,60 @@ $("#btnSend").click(function () {
   });
 });
 
+$("#createGroupBtn").click(function () {
+  addGroupList = [];
+});
+
+$("#createGroupBtnFinal").click(function () {
+  var loginUserToken = localStorage.getItem("userauthtoken");
+
+  $.ajax({
+    type: "POST",
+    url: "/api/channel/create",
+    data: createGroupObject,
+    headers: {
+      Authorization: `Bearer ${loginUserToken}`,
+    },
+    dataType: "json",
+
+    success: function (result) {
+      console.log("success :", result);
+    },
+  });
+});
+
+$("#createGroupAddEmailBtn").click(function () {
+  var email = $("#createGroupAddEmailInput").val();
+  var groupName = $("createGroupNameInput").val();
+  console.log("hi, ", email, groupName);
+  var loginUserToken = localStorage.getItem("userauthtoken");
+
+  $.ajax({
+    type: "POST",
+    url: "/api/member/add",
+    data: {
+      email: email,
+    },
+    headers: {
+      Authorization: `Bearer ${loginUserToken}`,
+    },
+    dataType: "json",
+
+    success: function (result) {
+      if (result.code == 200) {
+        //var groupName = $("createGroupNameInput").val();
+        addGroupList.push(result.data.email);
+        createGroupObject = {
+          owner: currentUser.email,
+          group_name: groupName,
+          group_image_path: "",
+          member_list: addGroupList.join(", "),
+        };
+        console.log("createGroupObject : ", createGroupObject);
+      }
+    },
+  });
+});
 socket.on("receiveTest", function (data) {
   console.log("receiveTest!!", data);
   var className =
@@ -86,9 +145,10 @@ $("#contacts-tab").click(function () {
       if (result.code == 200) {
         //$(".contacts-list").html("");
         var data = {
-          memberId: user.member_id,
-          name: user.name,
-          channelType: constants.CHANNEL_TYPE_ONE_VS_ONE,
+          memberId: currentUser.member_id,
+          name: currentUser.name,
+          //channelType: constants.CHANNEL_TYPE_ONE_VS_ONE,
+          channelType: 1,
         };
         $.each(result.data, function (index, user) {
           var userTag = `                  <li onClick="fnChatEntry(${data});">

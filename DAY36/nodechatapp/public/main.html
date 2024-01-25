@@ -735,6 +735,8 @@
                     class="btn btn-primary btn-block"
                     data-toggle="modal"
                     data-target="#createGroup"
+                    id="createGroupBtn"
+                    name="createGroupBtn"
                   >
                     Create Group
                   </button>
@@ -1565,16 +1567,33 @@
                 <!-- Upload profile end -->
 
                 <div class="field-wrapper">
-                  <input type="text" placeholder="Enter Group Name" />
+                  <input
+                    type="text"
+                    id="createGroupNameInput"
+                    name="createGroupNameInput"
+                    placeholder="Enter Group Name"
+                  />
                   <div class="field-placeholder">Group Name</div>
                 </div>
 
                 <div class="field-wrapper-group">
                   <div class="field-wrapper">
-                    <input type="email" placeholder="Enter Email ID" />
+                    <input
+                      type="email"
+                      id="createGroupAddEmailInput"
+                      name="createGroupAddEmailInput"
+                      placeholder="Enter Email ID"
+                    />
                     <div class="field-placeholder">Add User</div>
                   </div>
-                  <button class="btn btn-secondary">Add</button>
+                  <!---->
+                  <button
+                    class="btn btn-secondary"
+                    id="createGroupAddEmailBtn"
+                    name="createGroupAddEmailBtn"
+                  >
+                    Add
+                  </button>
                 </div>
 
                 <div class="stacked-users-group">
@@ -1611,7 +1630,11 @@
                 </div>
 
                 <div class="mt-3">
-                  <button class="btn btn-primary btn-block">
+                  <button
+                    class="btn btn-primary btn-block"
+                    id="createGroupBtnFinal"
+                    name="createGroupBtnFinal"
+                  >
                     Create Group
                   </button>
                 </div>
@@ -1797,6 +1820,7 @@
     <script src="/js/main.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- jQuery 라이브러리를 CDN으로 불러오기 -->
     <script
       src="https://cdn.socket.io/4.4.1/socket.io.min.js"
@@ -1830,7 +1854,7 @@
     </script>
 
     <!-- 채팅개발 클라이언트 기능 라이브러리 참조-->
-    <script src="/js/chat.js"></script>
+    <script type="module" src="/js/chat.js"></script>
     <script src="/js/valid.js"></script>
   </body>
 </html>

@@ -17,6 +17,8 @@ module.exports = (server) => {
     },
   });
 
+  io.adapter(redis({ host: "127.0.0.1", port: "6379" }));
+
   io.on("connection", (socket) => {
     //사용자 전역변수 정의
     //소켓Req객체

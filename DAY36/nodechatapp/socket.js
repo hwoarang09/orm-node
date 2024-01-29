@@ -1,5 +1,6 @@
 //socket.io 팩키지 참조
 const SocketIO = require("socket.io");
+const redis = require("socket.io-redis");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const moment = require("moment");

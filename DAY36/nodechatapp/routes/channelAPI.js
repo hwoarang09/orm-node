@@ -100,7 +100,7 @@ router.post("/create", async (req, res, next) => {
     };
 
     console.log("channel : ", channel);
-    const newChannel = await Channel.create(channel);
+    const newChannel = await db.Channel.create(channel);
 
     apiResult.code = 200;
     apiResult.data = newChannel;

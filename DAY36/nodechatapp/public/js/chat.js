@@ -5,21 +5,6 @@ console.log("111");
 console.log("112");
 var addGroupList = [];
 var createGroupObject = {};
-$("#btnSend").click(function () {
-  var channelId = currentChannel.channel_id;
-  var memberId = currentUser.member_id;
-  var nickName = currentUser.name;
-  var profile = currentUser.profile_img_path;
-  var message = $("#messageInputArea").val();
-
-  socket.emit("channelMsg", {
-    channelId,
-    memberId,
-    nickName,
-    message,
-    profile,
-  });
-});
 
 $("#createGroupBtn").click(function () {
   addGroupList = [];
@@ -27,7 +12,14 @@ $("#createGroupBtn").click(function () {
 
 $("#createGroupBtnFinal").click(function () {
   var loginUserToken = localStorage.getItem("userauthtoken");
-
+  var groupName = document.getElementById("createGroupNameInput").value;
+  createGroupObject = {
+    owner: currentUser.email,
+    group_name: groupName,
+    group_image_path: "",
+    member_list: addGroupList.join(", "),
+  };
+  console.log("createGroupObject : ", createGroupObject);
   $.ajax({
     type: "POST",
     url: "/api/channel/create",
@@ -45,7 +37,7 @@ $("#createGroupBtnFinal").click(function () {
 
 $("#createGroupAddEmailBtn").click(function () {
   var email = $("#createGroupAddEmailInput").val();
-  var groupName = $("createGroupNameInput").val();
+  var groupName = document.getElementById("createGroupNameInput").value;
   console.log("hi, ", email, groupName);
   var loginUserToken = localStorage.getItem("userauthtoken");
 
@@ -186,6 +178,22 @@ $("#contacts-tab").click(function () {
     error: function (err) {
       console.log("백엔드호출 API 호출 에러 발생 : ", err);
     },
+  });
+});
+
+$("#btnSend").click(function () {
+  var channelId = currentChannel.channel_id;
+  var memberId = currentUser.member_id;
+  var nickName = currentUser.name;
+  var profile = currentUser.profile_img_path;
+  var message = $("#messageInputArea").val();
+
+  socket.emit("channelMsg", {
+    channelId,
+    memberId,
+    nickName,
+    message,
+    profile,
   });
 });
 

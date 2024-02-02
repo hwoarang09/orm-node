@@ -5,7 +5,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const layout = require("express-ejs-layouts");
 require("dotenv").config();
-
+const webSocket = require("./socket.js");
+var debug = require("debug")("nodechatapp:server");
 //cors
 const cors = require("cors");
 
@@ -72,7 +73,7 @@ var server = app.listen(app.get("port"), function () {});
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+//server.listen(process.env.PORT || 3000);
 webSocket(server);
 server.on("error", onError);
 server.on("listening", onListening);

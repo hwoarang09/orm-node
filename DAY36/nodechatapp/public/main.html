@@ -1822,10 +1822,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- jQuery 라이브러리를 CDN으로 불러오기 -->
-    <script
+    <!--<script
+    "https://cdn.socket.io/4.7.4/socket.io.esm.min.js"
       src="https://cdn.socket.io/4.4.1/socket.io.min.js"
       crossorigin="anonymous"
-    ></script>
+    ></script>-->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
     <script>
       //JWT토큰 디코드 함수
       function decodeJWT(token) {
@@ -1848,7 +1850,7 @@
 
       console.log("현재 사용자  정보 조회 :", currentUser);
 
-      var socket = io.connect("http://localhost:3001/");
+      var socket = io.connect("http://localhost:3000/");
       var currentNickName = "eddy";
       var currentChannel = "";
     </script>
